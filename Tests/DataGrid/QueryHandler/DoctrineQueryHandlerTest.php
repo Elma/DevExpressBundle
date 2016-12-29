@@ -43,8 +43,8 @@ class DoctrineQueryHandlerTest extends TestCase
             ->with(new Expr\Comparison('lol', DoctrineComparison::GT, ':p0'));
 
         $qb->expects($this->once())
-            ->method('setParameters')
-            ->with(new ArrayCollection([new Parameter('p0', 'haha')]));
+            ->method('setParameter')
+            ->with('p0', 'haha');
         $handler = new DoctrineQueryHandler($config, $qb, $query);
         $handler->addFilters();
     }
@@ -103,9 +103,15 @@ class DoctrineQueryHandlerTest extends TestCase
         $qb = $this->getQBMock();
         $qb->expects($this->at(0))
             ->method('groupBy')
-            ->with('lol', 'desc');
+            ->with('lol');
         $qb->expects($this->at(1))
+            ->method('addOrderBy')
+            ->with('lol', 'desc');
+        $qb->expects($this->at(2))
             ->method('groupBy')
+            ->with('haha');
+        $qb->expects($this->at(3))
+            ->method('addOrderBy')
             ->with('haha', 'asc');
         $handler = new DoctrineQueryHandler($config, $qb, $query);
         $handler->addGrouping();
