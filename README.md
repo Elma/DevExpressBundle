@@ -10,7 +10,7 @@ Currently only a dxDataGrid bridge is provided
 ## Installation ##
 Add the bundle to your composer.json file:
 ```
-composer require //todo
+composer require elma/devexpressbundle "~1.0@dev"
 ```
 Register the bundle in your composer
 ```
