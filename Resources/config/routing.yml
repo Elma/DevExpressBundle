@@ -1,0 +1,9 @@
+bilendi_dev_express_homepage:
+    path:     /devexpress
+    defaults: { _controller: BilendiDevExpressBundle:Default:index }
+
+bilendi_dev_express_list:
+    path:     /devexpress/list
+    defaults: { _controller: BilendiDevExpressBundle:Default:list }
+    options:
+            expose: true

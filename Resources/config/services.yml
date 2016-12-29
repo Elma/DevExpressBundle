@@ -1,0 +1,3 @@
+services:
+    bilendi_dev_express.grid_query_parser:
+        class: Bilendi\DevExpressBundle\DataGrid\Parser\SearchQueryParser
