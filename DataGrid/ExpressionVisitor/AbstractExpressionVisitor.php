@@ -31,8 +31,11 @@ abstract class AbstractExpressionVisitor
      * @return mixed
      */
     public function visitCompositeExpression(CompositeExpression $compositeExpression) {
-        $expressions = \Functional\select($compositeExpression->getExpressions(), function (Visitable $expr) {
+        $expressions = \Functional\map($compositeExpression->getExpressions(), function (Visitable $expr) {
             return $expr->visit($this);
+        });
+        $expressions = \Functional\filter($expressions, function ($expr) {
+            return $expr !== null;
         });
         return $this->visitProcessedCompositeExpression($compositeExpression->getType(), $expressions);
     }
