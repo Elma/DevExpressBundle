@@ -66,9 +66,9 @@ class DoctrineQueryHandler
 
     /**
      * @param bool $noDefaultFilter
-     * @return QueryBuilder
+     * @return DoctrineQueryHandler
      */
-    public function addFilters($noDefaultFilter = false): QueryBuilder
+    public function addFilters($noDefaultFilter = false): DoctrineQueryHandler
     {
         $visitor = new DoctrineExpressionVisitor($this);
         $filters = $this->searchQuery->getFilter()->visit($visitor);
@@ -87,34 +87,32 @@ class DoctrineQueryHandler
             $this->queryBuilder->setParameter($parameter->getName(), $parameter->getValue());
         });
 
-        return $this->queryBuilder;
+        return $this;
     }
 
-
     /**
-     * @return QueryBuilder
+     * @return DoctrineQueryHandler
      */
-    public function addSorting(): QueryBuilder
+    public function addSorting(): DoctrineQueryHandler
     {
         foreach ($this->searchQuery->getSort() as $sort) {
             $this->queryBuilder->addOrderBy($this->transformField($sort->getField()),
                 $sort->isDesc() ? 'desc' : 'asc');
         }
-        return $this->queryBuilder;
+        return $this;
     }
 
-
     /**
-     * @return QueryBuilder
+     * @return DoctrineQueryHandler
      */
-    public function addGrouping(): QueryBuilder
+    public function addGrouping(): DoctrineQueryHandler
     {
         foreach ($this->searchQuery->getGroup() as $group) {
             $transField = $this->transformField($group->getField());
             $this->queryBuilder->groupBy($transField);
             $this->queryBuilder->addOrderBy($transField, $group->isDesc() ? 'desc' : 'asc');
         }
-        return $this->queryBuilder;
+        return $this;
     }
 
     /**
