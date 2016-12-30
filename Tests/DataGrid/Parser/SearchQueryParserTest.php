@@ -91,34 +91,6 @@ class SearchQueryParserTest extends TestCase
 
     }
 
-    public function testParseGroup()
-    {
-        $parser = new SearchQueryParser();
-        $this->assertEquals(0, $parser->getBuilder()->getMaxResults());
-
-        $dummy = new \stdClass();
-
-        $sort1 = new \stdClass();
-        $sort1->desc = false;
-        $sort1->selector = 'pouet';
-
-        $sort2 = new \stdClass();
-        $sort2->desc = true;
-        $sort2->selector = 'lol';
-
-        $dummy->group = [ $sort1, $sort2 ];
-
-        $parser->parseGroup($dummy);
-
-        $expected = [
-            new SearchGroup('pouet', false),
-            new SearchGroup('lol', true),
-        ];
-
-        $this->assertEquals($expected, $parser->getBuilder()->getGroupings());
-
-    }
-
     /**
      * @expectedException     \Bilendi\DevExpressBundle\Exception\NotArrayException
      */

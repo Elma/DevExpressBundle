@@ -24,13 +24,6 @@ class SearchQueryBuilderTest extends TestCase
         $this->assertEquals([new SearchSort('pouet', true)], $builder->getSortings());
     }
 
-    public function testGroup()
-    {
-        $builder = new SearchQueryBuilder();
-        $builder->group('pouet', true);
-        $this->assertEquals([new SearchGroup('pouet', true)], $builder->getGroupings());
-    }
-
     public function testStartIndex()
     {
         $builder = new SearchQueryBuilder();

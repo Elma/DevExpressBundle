@@ -21,11 +21,6 @@ class SearchQuery
     protected $sort = [];
 
     /**
-     * @var SearchGroup[]
-     */
-    protected $group;
-
-    /**
      * @var int
      */
     protected $startIndex = 0;
@@ -39,36 +34,18 @@ class SearchQuery
      * SearchQuery constructor.
      * @param $filter
      * @param $sort
-     * @param $group
      * @param $startIndex
      * @param $maxResults
      */
-    function __construct($filter, $sort, $group, $startIndex, $maxResults) {
+    function __construct($filter, $sort, $startIndex, $maxResults) {
         $this->filter = $filter;
         $this->sort = $sort;
-        $this->group = $group;
         if ($this->startIndex !== null) {
             $this->startIndex = (int) $startIndex;
         }
         if ($maxResults !== null) {
             $this->maxResults = (int) $maxResults;
         }
-    }
-
-    /**
-     * @return SearchGroup[]
-     */
-    public function getGroup(): array
-    {
-        return $this->group;
-    }
-
-    /**
-     * @param SearchGroup[] $group
-     */
-    public function setGroup(array $group)
-    {
-        $this->group = $group;
     }
 
     /**

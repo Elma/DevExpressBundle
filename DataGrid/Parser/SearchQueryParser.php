@@ -53,9 +53,6 @@ class SearchQueryParser
         if (isset($data->sort)) {
             $this->parseSort($data);
         }
-        if (isset($data->group)) {
-            $this->parseGroup($data);
-        }
         if (isset($data->filter)) {
             $this->parseFilter($data);
         }
@@ -100,21 +97,6 @@ class SearchQueryParser
             });
         } else {
             throw new NotArrayException('sort');
-        }
-    }
-
-    /**
-     * @param \stdClass $data
-     * @throws NotArrayException
-     */
-    public function parseGroup(\stdClass $data)
-    {
-        if (is_array($data->group)) {
-            \Functional\map($data->group, function (\stdClass $group) {
-                $this->builder->group($group->selector, $group->desc);
-            });
-        } else {
-            throw new NotArrayException('group');
         }
     }
 

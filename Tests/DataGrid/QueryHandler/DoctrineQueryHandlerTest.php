@@ -80,43 +80,6 @@ class DoctrineQueryHandlerTest extends TestCase
         $handler->addSorting();
     }
 
-    public function testAddGrouping()
-    {
-        $config = $this->getConfigMock();
-        $config->expects($this->at(0))
-            ->method('mapField')
-            ->with('lol')
-            ->willReturn('lol');
-        $config->expects($this->at(1))
-            ->method('mapField')
-            ->with('haha')
-            ->willReturn('haha');
-
-        $query = $this->getQueryMock();
-        $query->expects($this->once())
-            ->method('getGroup')
-            ->willReturn([
-                new SearchGroup('lol', true),
-                new SearchGroup('haha', false)
-            ]);
-
-        $qb = $this->getQBMock();
-        $qb->expects($this->at(0))
-            ->method('groupBy')
-            ->with('lol');
-        $qb->expects($this->at(1))
-            ->method('addOrderBy')
-            ->with('lol', 'desc');
-        $qb->expects($this->at(2))
-            ->method('groupBy')
-            ->with('haha');
-        $qb->expects($this->at(3))
-            ->method('addOrderBy')
-            ->with('haha', 'asc');
-        $handler = new DoctrineQueryHandler($config, $qb, $query);
-        $handler->addGrouping();
-    }
-
     public function testAddPagination()
     {
         $qb = $this->getQBMock();

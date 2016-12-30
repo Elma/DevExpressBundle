@@ -24,11 +24,6 @@ class SearchQueryBuilder
     protected $filters = [];
 
     /**
-     * @var SearchGroup[]
-     */
-    protected $groupings = [];
-
-    /**
      * @var SearchSort[]
      */
     protected $sortings = [];
@@ -56,7 +51,7 @@ class SearchQueryBuilder
         } else {
             $filters = $this->filters[0];
         }
-        return new SearchQuery($filters, $this->sortings, $this->groupings, $this->startIndex, $this->maxResults);
+        return new SearchQuery($filters, $this->sortings, $this->startIndex, $this->maxResults);
     }
 
     /**
@@ -65,14 +60,6 @@ class SearchQueryBuilder
     public function getFilters(): array
     {
         return $this->filters;
-    }
-
-    /**
-     * @return array
-     */
-    public function getGroupings(): array
-    {
-        return $this->groupings;
     }
 
     /**
@@ -98,16 +85,6 @@ class SearchQueryBuilder
     public function setFilters(array $filters)
     {
         $this->filters = $filters;
-        return $this;
-    }
-
-    /**
-     * @param array $groupings
-     * @return $this
-     */
-    public function setGroupings(array $groupings)
-    {
-        $this->groupings = $groupings;
         return $this;
     }
 
@@ -148,17 +125,6 @@ class SearchQueryBuilder
     public function sort(string $field, bool $desc)
     {
         $this->sortings[] = new SearchSort($field, $desc);
-        return $this;
-    }
-
-    /**
-     * @param string $field
-     * @param bool $desc
-     * @return $this
-     */
-    public function group(string $field, bool $desc)
-    {
-        $this->groupings[] = new SearchGroup($field, $desc);
         return $this;
     }
 

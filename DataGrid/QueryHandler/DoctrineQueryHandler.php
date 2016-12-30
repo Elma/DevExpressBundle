@@ -59,7 +59,6 @@ class DoctrineQueryHandler
     {
         $this->addFilters($noDefaultFilter);
         $this->addSorting();
-        $this->addGrouping();
         $this->addPagination();
         return $this->queryBuilder;
     }
@@ -98,19 +97,6 @@ class DoctrineQueryHandler
         foreach ($this->searchQuery->getSort() as $sort) {
             $this->queryBuilder->addOrderBy($this->transformField($sort->getField()),
                 $sort->isDesc() ? 'desc' : 'asc');
-        }
-        return $this;
-    }
-
-    /**
-     * @return DoctrineQueryHandler
-     */
-    public function addGrouping(): DoctrineQueryHandler
-    {
-        foreach ($this->searchQuery->getGroup() as $group) {
-            $transField = $this->transformField($group->getField());
-            $this->queryBuilder->groupBy($transField);
-            $this->queryBuilder->addOrderBy($transField, $group->isDesc() ? 'desc' : 'asc');
         }
         return $this;
     }
