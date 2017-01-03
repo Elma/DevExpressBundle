@@ -1,0 +1,13 @@
+machine:
+    php:
+        version: 7.0.11
+
+dependencies:
+    cache_directories:
+        - ~/.composer/cache/files
+    override:
+        - composer install --no-interaction
+
+test:
+    override:
+        - ./vendor/bin/phpunit 
