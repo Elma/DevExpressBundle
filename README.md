@@ -1,4 +1,5 @@
 [![Build Status](https://circleci.com/gh/Elma/DevExpressBundle.png?style=shield&circle-token=68c368dfa20dfcf807557136ea6a555da88c3adf)](https://circleci.com/gh/Elma/DevExpressBundle/tree/master)
+[![Coding Style]( https://styleci.io/repos/77622700/shield)](https://styleci.io/repos/77622700)
 
 ## Overview ##
 
