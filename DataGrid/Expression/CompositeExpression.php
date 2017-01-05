@@ -2,12 +2,10 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\Expression;
 
-
 use Bilendi\DevExpressBundle\DataGrid\ExpressionVisitor\AbstractExpressionVisitor;
 
 /**
- * Class CompositeExpression
- * @package Bilendi\DevExpressBundle\DataGrid\Expression
+ * Class CompositeExpression.
  */
 class CompositeExpression implements Visitable
 {
@@ -25,7 +23,7 @@ class CompositeExpression implements Visitable
     private $expressions = [];
 
     /**
-     * @param string $type
+     * @param string      $type
      * @param Visitable[] $expressions
      *
      * @throws \RuntimeException
@@ -48,11 +46,13 @@ class CompositeExpression implements Visitable
 
     /**
      * @param Visitable $expression
+     *
      * @return $this
      */
     public function addExpression(Visitable $expression)
     {
         $this->expressions[] = $expression;
+
         return $this;
     }
 
@@ -65,7 +65,7 @@ class CompositeExpression implements Visitable
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function visit(AbstractExpressionVisitor $visitor)
     {

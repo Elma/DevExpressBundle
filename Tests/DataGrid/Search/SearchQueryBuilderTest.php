@@ -2,7 +2,6 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\Search;
 
-
 use Bilendi\DevExpressBundle\DataGrid\Expression\ComparisonExpression;
 use Bilendi\DevExpressBundle\DataGrid\Expression\CompositeExpression;
 use Bilendi\DevExpressBundle\DataGrid\Expression\EmptyExpression;
@@ -67,7 +66,7 @@ class SearchQueryBuilderTest extends TestCase
         $this->assertInstanceOf(SearchQuery::class, $query);
         $expected = new CompositeExpression(CompositeExpression::TYPE_AND, [
             new ComparisonExpression('hihi', '>', 'hoho'),
-            new ComparisonExpression('huhu', '>', 'hihi')
+            new ComparisonExpression('huhu', '>', 'hihi'),
         ]);
         $this->assertEquals($expected, $query->getFilter());
     }

@@ -2,7 +2,6 @@
 
 namespace Bilendi\DevExpressBundle\Tests\DataGrid\ExpressionVisitor;
 
-
 use Bilendi\DevExpressBundle\DataGrid\Expression\ComparisonExpression;
 use Bilendi\DevExpressBundle\DataGrid\Expression\CompositeExpression;
 use Bilendi\DevExpressBundle\DataGrid\ExpressionVisitor\AbstractExpressionVisitor;
@@ -37,6 +36,7 @@ class AbstractExpressionVisitorTest extends TestCase
             ->willReturn([]);
         $mock->method('getType')
             ->willReturn(CompositeExpression::TYPE_OR);
+
         return $mock;
     }
 
@@ -45,20 +45,20 @@ class AbstractExpressionVisitorTest extends TestCase
         $mock = $this->getMockBuilder(ComparisonExpression::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         return $mock;
     }
 }
 
 class ExpressionVisitorStub extends AbstractExpressionVisitor
 {
-    function visitComparison(ComparisonExpression $comparison)
+    public function visitComparison(ComparisonExpression $comparison)
     {
         return true;
     }
 
-    function visitProcessedCompositeExpression(string $type, array $expressions)
+    public function visitProcessedCompositeExpression(string $type, array $expressions)
     {
         return true;
     }
-
 }

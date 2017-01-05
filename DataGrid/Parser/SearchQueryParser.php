@@ -2,7 +2,6 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\Parser;
 
-
 use Bilendi\DevExpressBundle\DataGrid\Expression\ComparisonExpression;
 use Bilendi\DevExpressBundle\DataGrid\Expression\CompositeExpression;
 use Bilendi\DevExpressBundle\DataGrid\Expression\Visitable;
@@ -12,8 +11,7 @@ use Bilendi\DevExpressBundle\Exception\NotArrayException;
 use Bilendi\DevExpressBundle\Exception\NotNumericException;
 
 /**
- * Class SearchQueryParser
- * @package Bilendi\DevExpressBundle\DataGrid\Parser
+ * Class SearchQueryParser.
  */
 class SearchQueryParser
 {
@@ -40,6 +38,7 @@ class SearchQueryParser
 
     /**
      * @param \stdClass $data
+     *
      * @return SearchQuery
      */
     public function parse(\stdClass $data): SearchQuery
@@ -47,7 +46,7 @@ class SearchQueryParser
         if (isset($data->take)) {
             $this->parseMaxResults($data);
         }
-        if (isset($data->skip)){
+        if (isset($data->skip)) {
             $this->parseStartIndex($data);
         }
         if (isset($data->sort)) {
@@ -56,11 +55,13 @@ class SearchQueryParser
         if (isset($data->filter)) {
             $this->parseFilter($data);
         }
+
         return $this->builder->build();
     }
 
     /**
      * @param \stdClass $data
+     *
      * @throws NotNumericException
      */
     public function parseStartIndex(\stdClass $data)
@@ -74,6 +75,7 @@ class SearchQueryParser
 
     /**
      * @param \stdClass $data
+     *
      * @throws NotNumericException
      */
     public function parseMaxResults(\stdClass $data)
@@ -87,6 +89,7 @@ class SearchQueryParser
 
     /**
      * @param \stdClass $data
+     *
      * @throws NotArrayException
      */
     public function parseSort(\stdClass $data)
@@ -102,6 +105,7 @@ class SearchQueryParser
 
     /**
      * @param array $filter
+     *
      * @return ComparisonExpression
      */
     public function parseComparison(array $filter): ComparisonExpression
@@ -110,26 +114,30 @@ class SearchQueryParser
     }
 
     /**
-     * @param array $filter
+     * @param array                    $filter
      * @param CompositeExpression|null $parent
+     *
      * @return Visitable
+     *
      * @throws \Exception
      */
     public function parseDisjunction(array $filter, CompositeExpression $parent = null): Visitable
     {
-        if (count($filter) == 1 ){
+        if (count($filter) == 1) {
             if ($parent === null) {
                 return $this->parseComparison(array_shift($filter));
             } else {
                 $parent->addExpression($this->parseDisjunction(array_shift($filter)));
+
                 return $parent;
             }
-        } else if (count($filter) >= 3){
+        } elseif (count($filter) >= 3) {
             $first = array_shift($filter);
             $second = array_shift($filter);
             if ($second == 'and' || $second == 'or') {
                 if ($parent !== null && $parent->getType() !== $second) {
                     $parent->addExpression($this->parseComparison($first));
+
                     return $parent;
                 } else {
                     if ($second == 'and') {
@@ -139,6 +147,7 @@ class SearchQueryParser
                     }
                     if ($parent !== null) {
                         $parent->addExpression($this->parseDisjunction($first, $newComposite));
+
                         return $this->parseDisjunction($filter, $parent);
                     } else {
                         $newComposite->addExpression($this->parseDisjunction($first, $newComposite));
@@ -146,18 +155,17 @@ class SearchQueryParser
                         return $this->parseDisjunction($filter, $newComposite);
                     }
                 }
-
             } else {
                 return $this->parseComparison([$first, $second, $filter[0]]);
             }
         } else {
-            throw new \Exception('Error for format filter:' . print_r($filter, true));
+            throw new \Exception('Error for format filter:'.print_r($filter, true));
         }
     }
 
-
     /**
      * @param \stdClass $data
+     *
      * @throws NotArrayException
      */
     public function parseFilter(\stdClass $data)

@@ -1,12 +1,11 @@
 <?php
 
 namespace Bilendi\DevExpressBundle\DataGrid\Search;
+
 use Bilendi\DevExpressBundle\DataGrid\Expression\Visitable;
 
-
 /**
- * Class SearchQuery
- * @package Bilendi\DevExpressBundle\DataGrid\Search
+ * Class SearchQuery.
  */
 class SearchQuery
 {
@@ -32,12 +31,14 @@ class SearchQuery
 
     /**
      * SearchQuery constructor.
+     *
      * @param $filter
      * @param $sort
      * @param $startIndex
      * @param $maxResults
      */
-    function __construct($filter, $sort, $startIndex, $maxResults) {
+    public function __construct($filter, $sort, $startIndex, $maxResults)
+    {
         $this->filter = $filter;
         $this->sort = $sort;
         if ($this->startIndex !== null) {

@@ -2,15 +2,13 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\QueryHandler;
 
-
 use Bilendi\DevExpressBundle\DataGrid\ExpressionVisitor\DoctrineExpressionVisitor;
 use Bilendi\DevExpressBundle\DataGrid\Search\SearchQuery;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * Class DoctrineQueryHandler
- * @package Bilendi\DevExpressBundle\DataGrid\QueryHandler
+ * Class DoctrineQueryHandler.
  */
 class DoctrineQueryHandler
 {
@@ -31,9 +29,10 @@ class DoctrineQueryHandler
 
     /**
      * DoctrineQueryHandler constructor.
+     *
      * @param DoctrineQueryConfig $queryConfig
-     * @param QueryBuilder $queryBuilder
-     * @param SearchQuery $searchQuery
+     * @param QueryBuilder        $queryBuilder
+     * @param SearchQuery         $searchQuery
      */
     public function __construct(DoctrineQueryConfig $queryConfig, QueryBuilder $queryBuilder, SearchQuery $searchQuery)
     {
@@ -44,15 +43,17 @@ class DoctrineQueryHandler
 
     /**
      * @param string $field
+     *
      * @return string
      */
-    public function transformField(string $field) {
+    public function transformField(string $field)
+    {
         return $this->queryConfig->mapField($field);
     }
 
-
     /**
      * @param bool $noDefaultFilter
+     *
      * @return QueryBuilder
      */
     public function addAllModifiers($noDefaultFilter = false)
@@ -60,11 +61,13 @@ class DoctrineQueryHandler
         $this->addFilters($noDefaultFilter);
         $this->addSorting();
         $this->addPagination();
+
         return $this->queryBuilder;
     }
 
     /**
      * @param bool $noDefaultFilter
+     *
      * @return DoctrineQueryHandler
      */
     public function addFilters($noDefaultFilter = false): DoctrineQueryHandler
@@ -78,11 +81,11 @@ class DoctrineQueryHandler
 
         if (!$noDefaultFilter) {
             foreach ($this->queryConfig->getDefaultFilters() as $comparison) {
-                    $this->queryBuilder->andWhere($comparison->visit($visitor));
+                $this->queryBuilder->andWhere($comparison->visit($visitor));
             }
         }
 
-        \Functional\map($visitor->getParameters(), function(Parameter $parameter) {
+        \Functional\map($visitor->getParameters(), function (Parameter $parameter) {
             $this->queryBuilder->setParameter($parameter->getName(), $parameter->getValue());
         });
 
@@ -98,6 +101,7 @@ class DoctrineQueryHandler
             $this->queryBuilder->addOrderBy($this->transformField($sort->getField()),
                 $sort->isDesc() ? 'desc' : 'asc');
         }
+
         return $this;
     }
 
@@ -110,6 +114,7 @@ class DoctrineQueryHandler
         if (($maxResults = $this->searchQuery->getMaxResults()) !== null) {
             $this->queryBuilder->setMaxResults($maxResults);
         }
+
         return $this->queryBuilder;
     }
 }
