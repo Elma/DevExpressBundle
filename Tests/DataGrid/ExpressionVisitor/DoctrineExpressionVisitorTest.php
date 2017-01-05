@@ -70,8 +70,8 @@ class DoctrineExpressionVisitorTest extends TestCase
         $expected = new Expr\Comparison('f1', 'LIKE', ':p0');
         $this->assertEquals($expected, $actual);
         $this->assertEquals(new ArrayCollection([
-            new Parameter('p0', '%pouet%')
-        ]),$visitor->getParameters());
+            new Parameter('p0', '%pouet%'),
+        ]), $visitor->getParameters());
     }
 
     public function testVisitComparisonStartsWith()
@@ -82,8 +82,8 @@ class DoctrineExpressionVisitorTest extends TestCase
         $expected = new Expr\Comparison('f1', 'LIKE', ':p0');
         $this->assertEquals($expected, $actual);
         $this->assertEquals(new ArrayCollection([
-            new Parameter('p0', 'pouet%')
-        ]),$visitor->getParameters());
+            new Parameter('p0', 'pouet%'),
+        ]), $visitor->getParameters());
     }
 
     public function testVisitComparisonEndsWith()
@@ -94,8 +94,8 @@ class DoctrineExpressionVisitorTest extends TestCase
         $expected = new Expr\Comparison('f1', 'LIKE', ':p0');
         $this->assertEquals($expected, $actual);
         $this->assertEquals(new ArrayCollection([
-            new Parameter('p0', '%pouet')
-        ]),$visitor->getParameters());
+            new Parameter('p0', '%pouet'),
+        ]), $visitor->getParameters());
     }
 
     public function testVisitComparisonNull()
@@ -141,6 +141,7 @@ class DoctrineExpressionVisitorTest extends TestCase
         $handler = $this->getHandlerMock();
         $handler->method('transformField')->willReturn('f1');
         $visitor = new DoctrineExpressionVisitor($handler);
+
         return $visitor;
     }
 
@@ -149,7 +150,7 @@ class DoctrineExpressionVisitorTest extends TestCase
         $mock = $this->getMockBuilder(DoctrineQueryHandler::class)
              ->disableOriginalConstructor()
              ->getMock();
+
         return $mock;
     }
-
 }

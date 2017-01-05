@@ -2,7 +2,6 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\ExpressionVisitor;
 
-
 use Bilendi\DevExpressBundle\DataGrid\Expression\ComparisonExpression;
 use Bilendi\DevExpressBundle\DataGrid\Expression\CompositeExpression;
 use Bilendi\DevExpressBundle\DataGrid\QueryHandler\DoctrineQueryHandler;
@@ -17,8 +16,7 @@ use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\Query\Expr\Comparison as DoctrineComparison;
 
 /**
- * Class DoctrineExpressionVisitor
- * @package Bilendi\DevExpressBundle\DataGrid\ExpressionVisitor
+ * Class DoctrineExpressionVisitor.
  */
 class DoctrineExpressionVisitor extends AbstractExpressionVisitor
 {
@@ -46,14 +44,15 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
      * @var array
      */
     protected static $operators = [
-        ComparisonExpression::GT  => DoctrineComparison::GT,
+        ComparisonExpression::GT => DoctrineComparison::GT,
         ComparisonExpression::GE => DoctrineComparison::GTE,
-        ComparisonExpression::LT  => DoctrineComparison::LT,
-        ComparisonExpression::LE => DoctrineComparison::LTE
+        ComparisonExpression::LT => DoctrineComparison::LT,
+        ComparisonExpression::LE => DoctrineComparison::LTE,
     ];
 
     /**
      * DoctrineExpressionVisitor constructor.
+     *
      * @param DoctrineQueryHandler $queryHandler
      */
     public function __construct(DoctrineQueryHandler $queryHandler)
@@ -66,6 +65,7 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
 
     /**
      * @param $operator
+     *
      * @return mixed|null
      */
     protected function convertOperator($operator)
@@ -75,16 +75,17 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
 
     /**
      * @param ComparisonExpression $comparison
+     *
      * @return mixed|string
      */
     protected function visitValue(ComparisonExpression $comparison)
     {
         if ($comparison->getOperator() === ComparisonExpression::CONTAINS) {
-            return '%' . $comparison->getValue() . '%';
+            return '%'.$comparison->getValue().'%';
         } elseif ($comparison->getOperator() === ComparisonExpression::STARTSWITH) {
-            return $comparison->getValue() . '%';
+            return $comparison->getValue().'%';
         } elseif ($comparison->getOperator() === ComparisonExpression::ENDSWITH) {
-            return '%' . $comparison->getValue();
+            return '%'.$comparison->getValue();
         } else {
             return $comparison->getValue();
         }
@@ -92,23 +93,27 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
 
     /**
      * @param $field
+     *
      * @return string
      */
-    protected function visitField(string $field) {
+    protected function visitField(string $field)
+    {
         $this->usedFields->add($field);
+
         return $this->queryHandler->transformField($field);
     }
 
     /**
      * @param ComparisonExpression $comparison
-     * @param string $fieldName
-     * @param string $value
+     * @param string               $fieldName
+     * @param string               $value
+     *
      * @return DoctrineComparison
      */
     protected function visitComparisonWithNotNullValue(ComparisonExpression $comparison, string $fieldName, string $value)
     {
-        $parameterName = 'p' . $this->parameters->count();
-        $operand = ':' . $parameterName;
+        $parameterName = 'p'.$this->parameters->count();
+        $operand = ':'.$parameterName;
         $this->parameters->add(new Parameter($parameterName, $value));
 
         switch ($comparison->getOperator()) {
@@ -135,7 +140,8 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
 
     /**
      * @param ComparisonExpression $comparison
-     * @param string $fieldName
+     * @param string               $fieldName
+     *
      * @return string
      */
     protected function visitComparisonWithNullValue(ComparisonExpression $comparison, string $fieldName)
@@ -150,9 +156,9 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
         }
     }
 
-
     /**
      * @param ComparisonExpression $comparison
+     *
      * @return DoctrineComparison
      */
     public function visitComparison(ComparisonExpression $comparison)
@@ -170,12 +176,13 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
 
     /**
      * @param string $type
-     * @param array $expressions
+     * @param array  $expressions
+     *
      * @return Andx|Orx
      */
     public function visitProcessedCompositeExpression(string $type, array $expressions)
     {
-        switch($type) {
+        switch ($type) {
             case CompositeExpression::TYPE_AND:
                 return new Andx($expressions);
             case CompositeExpression::TYPE_OR:

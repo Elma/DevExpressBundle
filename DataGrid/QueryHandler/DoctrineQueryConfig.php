@@ -2,12 +2,10 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\QueryHandler;
 
-
 use Bilendi\DevExpressBundle\DataGrid\Expression\Visitable;
 
 /**
- * Class DoctrineQueryConfig
- * @package Bilendi\DevExpressBundle\DataGrid\QueryHandler
+ * Class DoctrineQueryConfig.
  */
 class DoctrineQueryConfig
 {
@@ -23,6 +21,7 @@ class DoctrineQueryConfig
 
     /**
      * DoctrineQueryConfig constructor.
+     *
      * @param array $fieldMapping
      * @param array $defaultFilters
      */
@@ -66,6 +65,7 @@ class DoctrineQueryConfig
 
     /**
      * @param string $field
+     *
      * @return string
      */
     public function mapField(string $field)
@@ -73,6 +73,7 @@ class DoctrineQueryConfig
         if (array_key_exists($field, $this->fieldMapping)) {
             return $this->fieldMapping[$field];
         }
+
         return $field;
     }
 }

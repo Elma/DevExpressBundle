@@ -5,8 +5,6 @@ namespace Bilendi\DevExpressBundle\Tests\DataGrid\Parser;
 use Bilendi\DevExpressBundle\DataGrid\Expression\ComparisonExpression;
 use Bilendi\DevExpressBundle\DataGrid\Expression\CompositeExpression;
 use Bilendi\DevExpressBundle\DataGrid\Parser\SearchQueryParser;
-
-use Bilendi\DevExpressBundle\DataGrid\Search\SearchGroup;
 use Bilendi\DevExpressBundle\DataGrid\Search\SearchSort;
 use PHPUnit\Framework\TestCase;
 
@@ -78,7 +76,7 @@ class SearchQueryParserTest extends TestCase
         $sort2->desc = true;
         $sort2->selector = 'lol';
 
-        $dummy->sort = [ $sort1, $sort2 ];
+        $dummy->sort = [$sort1, $sort2];
 
         $parser->parseSort($dummy);
 
@@ -88,7 +86,6 @@ class SearchQueryParserTest extends TestCase
         ];
 
         $this->assertEquals($expected, $parser->getBuilder()->getSortings());
-
     }
 
     /**
@@ -109,10 +106,10 @@ class SearchQueryParserTest extends TestCase
     {
         $parser = new SearchQueryParser();
         $filter = [
-            "number", "<>", 0
+            'number', '<>', 0,
         ];
         $actual = $parser->parseDisjunction($filter);
-        $expected = new ComparisonExpression("number", "<>", 0);
+        $expected = new ComparisonExpression('number', '<>', 0);
         $this->assertEquals($expected, $actual);
     }
 
@@ -120,14 +117,14 @@ class SearchQueryParserTest extends TestCase
     {
         $parser = new SearchQueryParser();
         $filter = [
-            ["number", "<>", 0],
-            "or",
-            ["pouet", ">", "lol"]
+            ['number', '<>', 0],
+            'or',
+            ['pouet', '>', 'lol'],
         ];
         $actual = $parser->parseDisjunction($filter);
         $exps = [
-            new ComparisonExpression("number", "<>", 0),
-            new ComparisonExpression("pouet", ">", "lol")
+            new ComparisonExpression('number', '<>', 0),
+            new ComparisonExpression('pouet', '>', 'lol'),
         ];
         $expected = new CompositeExpression(CompositeExpression::TYPE_OR, $exps);
         $this->assertEquals($expected, $actual);
@@ -137,17 +134,17 @@ class SearchQueryParserTest extends TestCase
     {
         $parser = new SearchQueryParser();
         $filter = [
-            ["number", "<>", 0],
-            "or",
-            ["pouet", ">", "lol"],
-            "or",
-            ["yo", "=", "salut"]
+            ['number', '<>', 0],
+            'or',
+            ['pouet', '>', 'lol'],
+            'or',
+            ['yo', '=', 'salut'],
         ];
         $actual = $parser->parseDisjunction($filter);
         $exps = [
-            new ComparisonExpression("number", "<>", 0),
-            new ComparisonExpression("pouet", ">", "lol"),
-            new ComparisonExpression("yo", "=", "salut")
+            new ComparisonExpression('number', '<>', 0),
+            new ComparisonExpression('pouet', '>', 'lol'),
+            new ComparisonExpression('yo', '=', 'salut'),
         ];
         $expected = new CompositeExpression(CompositeExpression::TYPE_OR, $exps);
         $this->assertEquals($expected, $actual);
@@ -157,14 +154,14 @@ class SearchQueryParserTest extends TestCase
     {
         $parser = new SearchQueryParser();
         $filter = [
-            ["number", "<>", 0],
-            "and",
-            ["pouet", ">", "lol"]
+            ['number', '<>', 0],
+            'and',
+            ['pouet', '>', 'lol'],
         ];
         $actual = $parser->parseDisjunction($filter);
         $exps = [
-            new ComparisonExpression("number", "<>", 0),
-            new ComparisonExpression("pouet", ">", "lol")
+            new ComparisonExpression('number', '<>', 0),
+            new ComparisonExpression('pouet', '>', 'lol'),
         ];
         $expected = new CompositeExpression(CompositeExpression::TYPE_AND, $exps);
         $this->assertEquals($expected, $actual);
@@ -174,17 +171,17 @@ class SearchQueryParserTest extends TestCase
     {
         $parser = new SearchQueryParser();
         $filter = [
-            ["number", "<>", 0],
-            "and",
-            ["pouet", ">", "lol"],
-            "and",
-            ["yo", "=", "salut"]
+            ['number', '<>', 0],
+            'and',
+            ['pouet', '>', 'lol'],
+            'and',
+            ['yo', '=', 'salut'],
         ];
         $actual = $parser->parseDisjunction($filter);
         $exps = [
-            new ComparisonExpression("number", "<>", 0),
-            new ComparisonExpression("pouet", ">", "lol"),
-            new ComparisonExpression("yo", "=", "salut")
+            new ComparisonExpression('number', '<>', 0),
+            new ComparisonExpression('pouet', '>', 'lol'),
+            new ComparisonExpression('yo', '=', 'salut'),
         ];
         $expected = new CompositeExpression(CompositeExpression::TYPE_AND, $exps);
         $this->assertEquals($expected, $actual);
@@ -194,23 +191,23 @@ class SearchQueryParserTest extends TestCase
     {
         $parser = new SearchQueryParser();
         $filter = [
-            ["number", "<>", 0],
-            "and",
+            ['number', '<>', 0],
+            'and',
             [
-                ["pouet", ">", "lol"],
-                "or",
-                ["yo", "=", "salut"]
-            ]
+                ['pouet', '>', 'lol'],
+                'or',
+                ['yo', '=', 'salut'],
+            ],
         ];
         $actual = $parser->parseDisjunction($filter);
         $expOr = [
-            new ComparisonExpression("pouet", ">", "lol"),
-            new ComparisonExpression("yo", "=", "salut")
+            new ComparisonExpression('pouet', '>', 'lol'),
+            new ComparisonExpression('yo', '=', 'salut'),
         ];
         $compositeOr = new CompositeExpression(CompositeExpression::TYPE_OR, $expOr);
         $expected = new CompositeExpression(CompositeExpression::TYPE_AND, [
-            new ComparisonExpression("number", "<>", 0),
-            $compositeOr
+            new ComparisonExpression('number', '<>', 0),
+            $compositeOr,
         ]);
         $this->assertEquals($expected, $actual);
     }
@@ -219,23 +216,23 @@ class SearchQueryParserTest extends TestCase
     {
         $parser = new SearchQueryParser();
         $filter = [
-            ["number", "<>", 0],
-            "or",
+            ['number', '<>', 0],
+            'or',
             [
-                ["pouet", ">", "lol"],
-                "and",
-                ["yo", "=", "salut"]
-            ]
+                ['pouet', '>', 'lol'],
+                'and',
+                ['yo', '=', 'salut'],
+            ],
         ];
         $actual = $parser->parseDisjunction($filter);
         $expAnd = [
-            new ComparisonExpression("pouet", ">", "lol"),
-            new ComparisonExpression("yo", "=", "salut")
+            new ComparisonExpression('pouet', '>', 'lol'),
+            new ComparisonExpression('yo', '=', 'salut'),
         ];
         $compositeAnd = new CompositeExpression(CompositeExpression::TYPE_AND, $expAnd);
         $expected = new CompositeExpression(CompositeExpression::TYPE_OR, [
-            new ComparisonExpression("number", "<>", 0),
-            $compositeAnd
+            new ComparisonExpression('number', '<>', 0),
+            $compositeAnd,
         ]);
         $this->assertEquals($expected, $actual);
     }
@@ -244,34 +241,34 @@ class SearchQueryParserTest extends TestCase
     {
         $parser = new SearchQueryParser();
         $filter = [
-            ["number", "<>", 0],
-            "or",
+            ['number', '<>', 0],
+            'or',
             [
-                ["pouet", ">", "lol"],
-                "and",
+                ['pouet', '>', 'lol'],
+                'and',
                 [
-                    ["yo", "=", "salut"],
+                    ['yo', '=', 'salut'],
                     'or',
-                    ["tug", "<>", "thug"]
-                ]
-            ]
+                    ['tug', '<>', 'thug'],
+                ],
+            ],
         ];
         $actual = $parser->parseDisjunction($filter);
 
         $expNestedOr = [
-            new ComparisonExpression("yo", "=", "salut"),
-            new ComparisonExpression("tug", "<>", "thug"),
+            new ComparisonExpression('yo', '=', 'salut'),
+            new ComparisonExpression('tug', '<>', 'thug'),
         ];
         $nestedOr = new CompositeExpression(CompositeExpression::TYPE_OR, $expNestedOr);
 
         $compositeAnd = new CompositeExpression(CompositeExpression::TYPE_AND, [
-            new ComparisonExpression("pouet", ">", "lol"),
-            $nestedOr
+            new ComparisonExpression('pouet', '>', 'lol'),
+            $nestedOr,
         ]);
 
         $expected = new CompositeExpression(CompositeExpression::TYPE_OR, [
-            new ComparisonExpression("number", "<>", 0),
-            $compositeAnd
+            new ComparisonExpression('number', '<>', 0),
+            $compositeAnd,
         ]);
         $this->assertEquals($expected, $actual);
     }

@@ -2,10 +2,8 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\Search;
 
-
 /**
- * Class SearchSort
- * @package Bilendi\DevExpressBundle\DataGrid\Search
+ * Class SearchSort.
  */
 class SearchSort
 {
@@ -15,16 +13,17 @@ class SearchSort
     private $field;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $desc;
 
     /**
      * SearchSort constructor.
+     *
      * @param string $field
-     * @param bool $desc
+     * @param bool   $desc
      */
-    function __construct(string $field, bool $desc)
+    public function __construct(string $field, bool $desc)
     {
         $this->field = $field;
         $this->desc = $desc;
@@ -39,7 +38,7 @@ class SearchSort
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isDesc()
     {

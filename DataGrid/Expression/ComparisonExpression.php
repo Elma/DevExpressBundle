@@ -2,12 +2,10 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\Expression;
 
-
 use Bilendi\DevExpressBundle\DataGrid\ExpressionVisitor\AbstractExpressionVisitor;
 
 /**
- * Class ComparisonExpression
- * @package Bilendi\DevExpressBundle\DataGrid\Expression
+ * Class ComparisonExpression.
  */
 class ComparisonExpression implements Visitable
 {
@@ -63,6 +61,7 @@ class ComparisonExpression implements Visitable
 
     /**
      * ComparisonExpression constructor.
+     *
      * @param string $field
      * @param string $operator
      * @param $value
@@ -74,14 +73,13 @@ class ComparisonExpression implements Visitable
         $this->value = $value;
     }
 
-
     /**
      * @param AbstractExpressionVisitor $visitor
+     *
      * @return mixed
      */
-    function visit(AbstractExpressionVisitor $visitor)
+    public function visit(AbstractExpressionVisitor $visitor)
     {
         return $visitor->visitComparison($this);
     }
-
 }

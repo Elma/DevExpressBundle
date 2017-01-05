@@ -2,7 +2,6 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\Search;
 
-
 class SearchGroup
 {
     /**
@@ -11,16 +10,17 @@ class SearchGroup
     private $field;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $desc;
 
     /**
      * SearchGroup constructor.
+     *
      * @param string $field
-     * @param bool $desc
+     * @param bool   $desc
      */
-    function __construct(string $field, bool $desc)
+    public function __construct(string $field, bool $desc)
     {
         $this->field = $field;
         $this->desc = $desc;
@@ -35,7 +35,7 @@ class SearchGroup
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isDesc()
     {

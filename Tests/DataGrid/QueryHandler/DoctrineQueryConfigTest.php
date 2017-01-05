@@ -11,16 +11,16 @@ class DoctrineQueryConfigTest extends TestCase
     {
         $config = new DoctrineQueryConfig();
         $config->setFieldMapping([
-            'lol' => 'lol.pouet'
+            'lol' => 'lol.pouet',
         ]);
-        $this->assertEquals(['lol' =>'lol.pouet'], $config->getFieldMapping());
+        $this->assertEquals(['lol' => 'lol.pouet'], $config->getFieldMapping());
     }
 
     public function testDefaultFilters()
     {
         $config = new DoctrineQueryConfig();
         $config->setDefaultFilters([
-            new ComparisonExpression('lol', '>', 'mdr')
+            new ComparisonExpression('lol', '>', 'mdr'),
         ]);
         $this->assertEquals([new ComparisonExpression('lol', '>', 'mdr')], $config->getDefaultFilters());
     }
@@ -29,7 +29,7 @@ class DoctrineQueryConfigTest extends TestCase
     {
         $config = new DoctrineQueryConfig();
         $config->setFieldMapping([
-            'lol' => 'lol.pouet'
+            'lol' => 'lol.pouet',
         ]);
         $this->assertEquals('lol.pouet', $config->mapField('lol'));
         $this->assertEquals('hey', $config->mapField('hey'));

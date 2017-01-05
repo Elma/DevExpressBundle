@@ -2,18 +2,17 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\Expression;
 
-
 use Bilendi\DevExpressBundle\DataGrid\ExpressionVisitor\AbstractExpressionVisitor;
 
 /**
- * Interface Visitable
- * @package Bilendi\DevExpressBundle\DataGrid\Expression
+ * Interface Visitable.
  */
 interface Visitable
 {
     /**
      * @param AbstractExpressionVisitor $visitor
+     *
      * @return mixed
      */
-    function visit(AbstractExpressionVisitor $visitor);
+    public function visit(AbstractExpressionVisitor $visitor);
 }

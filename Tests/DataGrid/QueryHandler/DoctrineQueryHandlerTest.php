@@ -2,15 +2,11 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\QueryHandler;
 
-
 use Bilendi\DevExpressBundle\DataGrid\Expression\ComparisonExpression;
-use Bilendi\DevExpressBundle\DataGrid\Search\SearchGroup;
 use Bilendi\DevExpressBundle\DataGrid\Search\SearchQuery;
 use Bilendi\DevExpressBundle\DataGrid\Search\SearchSort;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\Expr\Comparison as DoctrineComparison;
-use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -66,7 +62,7 @@ class DoctrineQueryHandlerTest extends TestCase
                 ->method('getSort')
                 ->willReturn([
                     new SearchSort('lol', true),
-                    new SearchSort('haha', false)
+                    new SearchSort('haha', false),
                 ]);
 
         $qb = $this->getQBMock();

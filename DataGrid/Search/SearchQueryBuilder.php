@@ -2,19 +2,16 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\Search;
 
-
-/**
+/*
  * Class SearchQueryBuilder
  * @package Bilendi\DevExpressBundle\DataGrid\Search
  */
-use Bilendi\DevExpressBundle\DataGrid\Expression\ComparisonExpression;
 use Bilendi\DevExpressBundle\DataGrid\Expression\CompositeExpression;
 use Bilendi\DevExpressBundle\DataGrid\Expression\EmptyExpression;
 use Bilendi\DevExpressBundle\DataGrid\Expression\Visitable;
 
 /**
- * Class SearchQueryBuilder
- * @package Bilendi\DevExpressBundle\DataGrid\Search
+ * Class SearchQueryBuilder.
  */
 class SearchQueryBuilder
 {
@@ -46,11 +43,12 @@ class SearchQueryBuilder
         $filters = null;
         if (empty($this->filters)) {
             $filters = new EmptyExpression();
-        } else if (count($this->filters) > 1) {
+        } elseif (count($this->filters) > 1) {
             $filters = new CompositeExpression(CompositeExpression::TYPE_AND, $this->filters);
         } else {
             $filters = $this->filters[0];
         }
+
         return new SearchQuery($filters, $this->sortings, $this->startIndex, $this->maxResults);
     }
 
@@ -70,9 +68,6 @@ class SearchQueryBuilder
         return $this->startIndex;
     }
 
-    /**
-     * @return null
-     */
     public function getMaxResults()
     {
         return $this->maxResults;
@@ -80,11 +75,13 @@ class SearchQueryBuilder
 
     /**
      * @param array $filters
+     *
      * @return $this
      */
     public function setFilters(array $filters)
     {
         $this->filters = $filters;
+
         return $this;
     }
 
@@ -98,42 +95,50 @@ class SearchQueryBuilder
 
     /**
      * @param int $startIndex
+     *
      * @return $this
      */
     public function setStartIndex(int $startIndex)
     {
         $this->startIndex = $startIndex;
+
         return $this;
     }
 
     /**
      * @param $maxResults
+     *
      * @return $this
      */
     public function setMaxResults($maxResults)
     {
         $this->maxResults = $maxResults;
+
         return $this;
     }
 
-
     /**
      * @param string $field
-     * @param bool $desc
+     * @param bool   $desc
+     *
      * @return $this
      */
     public function sort(string $field, bool $desc)
     {
         $this->sortings[] = new SearchSort($field, $desc);
+
         return $this;
     }
 
     /**
      * @param Visitable $expression
+     *
      * @return $this
      */
-    public function filter(Visitable $expression) {
+    public function filter(Visitable $expression)
+    {
         $this->filters[] = $expression;
+
         return $this;
     }
 }
