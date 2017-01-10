@@ -134,6 +134,7 @@ class DoctrineQueryHandlerTest extends TestCase
             ->getMock();
         $mock->method('getDefaultFilters')
              ->willReturn([new ComparisonExpression('coucou', '>', 3)]);
+
         return $mock;
     }
 

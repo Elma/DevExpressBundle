@@ -81,7 +81,7 @@ class DoctrineQueryHandler
         }
 
         if (!$noDefaultFilter) {
-            \Functional\map($this->queryConfig->getDefaultFilters(), function(Visitable $comparison) use ($visitor) {
+            \Functional\map($this->queryConfig->getDefaultFilters(), function (Visitable $comparison) use ($visitor) {
                 $this->queryBuilder->andWhere($comparison->visit($visitor));
             });
         }
