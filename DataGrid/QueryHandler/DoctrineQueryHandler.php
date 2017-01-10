@@ -2,6 +2,7 @@
 
 namespace Bilendi\DevExpressBundle\DataGrid\QueryHandler;
 
+use Bilendi\DevExpressBundle\DataGrid\Expression\Visitable;
 use Bilendi\DevExpressBundle\DataGrid\ExpressionVisitor\DoctrineExpressionVisitor;
 use Bilendi\DevExpressBundle\DataGrid\Search\SearchQuery;
 use Doctrine\ORM\Query\Parameter;
@@ -80,9 +81,9 @@ class DoctrineQueryHandler
         }
 
         if (!$noDefaultFilter) {
-            foreach ($this->queryConfig->getDefaultFilters() as $comparison) {
+            \Functional\map($this->queryConfig->getDefaultFilters(), function(Visitable $comparison) use ($visitor) {
                 $this->queryBuilder->andWhere($comparison->visit($visitor));
-            }
+            });
         }
 
         \Functional\map($visitor->getParameters(), function (Parameter $parameter) {

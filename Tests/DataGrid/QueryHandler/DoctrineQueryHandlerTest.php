@@ -3,6 +3,7 @@
 namespace Bilendi\DevExpressBundle\DataGrid\QueryHandler;
 
 use Bilendi\DevExpressBundle\DataGrid\Expression\ComparisonExpression;
+use Bilendi\DevExpressBundle\DataGrid\Expression\EmptyExpression;
 use Bilendi\DevExpressBundle\DataGrid\Search\SearchQuery;
 use Bilendi\DevExpressBundle\DataGrid\Search\SearchSort;
 use Doctrine\ORM\Query\Expr;
@@ -41,6 +42,30 @@ class DoctrineQueryHandlerTest extends TestCase
         $qb->expects($this->once())
             ->method('setParameter')
             ->with('p0', 'haha');
+        $handler = new DoctrineQueryHandler($config, $qb, $query);
+        $handler->addFilters();
+    }
+
+    public function testAddFiltersWithDefaultFilters()
+    {
+        $config = $this->getConfigMockWithDefaultFilters();
+        $config->expects($this->once())
+            ->method('mapField')
+            ->willReturn('coucou');
+
+        $query = $this->getQueryMock();
+        $query->expects($this->once())
+            ->method('getFilter')
+            ->willReturn(new EmptyExpression());
+
+        $qb = $this->getQBMock();
+        $qb->expects($this->once())
+            ->method('andWhere')
+            ->with(new Expr\Comparison('coucou', DoctrineComparison::GT, ':p0'));
+
+        $qb->expects($this->once())
+            ->method('setParameter')
+            ->with('p0', 3);
         $handler = new DoctrineQueryHandler($config, $qb, $query);
         $handler->addFilters();
     }
@@ -100,6 +125,16 @@ class DoctrineQueryHandlerTest extends TestCase
         return $this->getMockBuilder(DoctrineQueryConfig::class)
                     ->disableOriginalConstructor()
                     ->getMock();
+    }
+
+    protected function getConfigMockWithDefaultFilters()
+    {
+        $mock = $this->getMockBuilder(DoctrineQueryConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mock->method('getDefaultFilters')
+             ->willReturn([new ComparisonExpression('coucou', '>', 3)]);
+        return $mock;
     }
 
     protected function getQBMock()
