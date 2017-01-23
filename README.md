@@ -26,36 +26,62 @@ $bundles = [
 ```
 ## dxDataGrid ##
 
-First you have to create a queryBuilder and select domething from an entity. It's up to you to build your query with parameters that are defined in your code and note in the loadOptions.
-
-This bridge only transform the loadOptions data to exploitable DQL pieces. 
-
+Here is a detailed example of an implementation.
 ```php
-// Create a queryBuilder and use it
-$querybuilder = $this->em->createQueryBuilder();
-$queryBuilder->select('')->from('')->...;
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route(...)
+     */
+    public function indexAction(Request $request)
+    {
+        // Parse the DevExpress object
+        $query = $parser->parse(json_decode($request->get('loadOptions')));
+        // Initiate the parser
+        $parser = new SearchQueryParser(); 
 
-// Then create an instance of SearchQueryParser or use the service
-$parser = new SearchQueryParser();
+        // Link between the column header and the doctrine field
+        $map = [
+            "Username" => "u.username",
+            "FirstName" => "u.firstName"
+        ];
+        // Create the config with the mapping
+        $config = new DoctrineQueryConfig($map);
 
-// Call the parse function on the decoded json data of the loaOptions provided by the dataGrid custom service load function
-$data = json_decode($request->get("loadOptions"));
-$query = $parser->parse($data);
-
-// Create a config in which you can define default filters and columns identifier to entity field mapping
-$map = [
-    'itemId' => 'alias.itemId'
-];
-$config = new DoctrineQueryConfig($map);
-
-// Create a query handler and add the filters/sorting/pagination
-$handler = new DoctrineQueryHandler($config, $queryBuilder, $query);
-$handler->addAllModifiers(); // Add all modifiers at once
-
-// And then you can get the results, for example
-$querybuilder->getQuery->getResults();
+        // Return the data and the total number of item
+        return $this->json([
+            'content' => $this->getContent($config, $query),
+            'total' => $this->getTotal($config, $query)
+        ]);
+    }
 ```
+Return the data
+```php
+    private function getContent(DoctrineQueryConfig $config, SearchQuery $query)
+    {
+        // Create the query builder
+        $queryBuilder = $this->getDoctrine()->getManager()->createQueryBuilder();
+        // Select Data from the DB
+        $queryBuilder->select('u')->from('AcmeUserBundle:Order', 'u');
 
+        // Create the query handle
+        $handler = new DoctrineQueryHandler($config, $queryBuilder, $query);
+        // Binds the filters, pagination and sorting
+        $queryBuilder = $handler->addAllModifiers();
 
+        return $queryBuilder->getQuery()->getResult();
+    }
+```
+Return the number of items
+```php
+    private function getTotal(DoctrineQueryConfig $config, SearchQuery $query)
+    {
+        $queryBuilder = $this->getDoctrine()->getManager('catalogue')->createQueryBuilder();
+        $queryBuilder->select('COUNT(u)')->from('AcmeUserBundle:Order', 'u');
 
+        $handler = new DoctrineQueryHandler($config, $queryBuilder, $query);
+        // Add only the filters. You must not add the pagination. You should not add sorting (useless for counting)
+        $handler->addFilters();
 
+       return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+```
