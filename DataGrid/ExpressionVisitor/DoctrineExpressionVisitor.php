@@ -80,7 +80,7 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
      */
     protected function visitValue(ComparisonExpression $comparison)
     {
-        if ($comparison->getOperator() === ComparisonExpression::CONTAINS) {
+        if ($comparison->getOperator() === ComparisonExpression::CONTAINS || $comparison->getOperator() === ComparisonExpression::NOTCONTAINS) {
             return '%'.$comparison->getValue().'%';
         } elseif ($comparison->getOperator() === ComparisonExpression::STARTSWITH) {
             return $comparison->getValue().'%';
@@ -125,6 +125,8 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
             case ComparisonExpression::STARTSWITH:
             case ComparisonExpression::ENDSWITH:
                 return $this->expr->like($fieldName, $operand);
+            case ComparisonExpression::NOTCONTAINS:
+                return $this->expr->notLike($fieldName, $operand);
             default:
                 $operator = $this->convertOperator($comparison->getOperator());
                 if ($operator) {
