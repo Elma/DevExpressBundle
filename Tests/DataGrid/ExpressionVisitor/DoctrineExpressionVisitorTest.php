@@ -74,6 +74,18 @@ class DoctrineExpressionVisitorTest extends TestCase
         ]), $visitor->getParameters());
     }
 
+    public function testVisitComparisonNotContains()
+    {
+        $visitor = $this->getVisitor();
+        $exp = new ComparisonExpression('f1', ComparisonExpression::NOTCONTAINS, 'pouet');
+        $actual = $visitor->visitComparison($exp);
+        $expected = new Expr\Comparison('f1', 'NOT LIKE', ':p0');
+        $this->assertEquals($expected, $actual);
+        $this->assertEquals(new ArrayCollection([
+            new Parameter('p0', '%pouet%'),
+        ]), $visitor->getParameters());
+    }
+
     public function testVisitComparisonStartsWith()
     {
         $visitor = $this->getVisitor();
