@@ -34,10 +34,10 @@ Here is a detailed example of an implementation.
      */
     public function indexAction(Request $request)
     {
-        // Parse the DevExpress object
-        $query = $parser->parse(json_decode($request->get('loadOptions')));
         // Initiate the parser
         $parser = new SearchQueryParser(); 
+        // Parse the DevExpress object
+        $query = $parser->parse(json_decode($request->get('loadOptions')));
 
         // Link between the column header and the doctrine field
         $map = [
