@@ -5,6 +5,7 @@ namespace Bilendi\DevExpressBundle\DataGrid\QueryHandler;
 use Bilendi\DevExpressBundle\DataGrid\Expression\Visitable;
 use Bilendi\DevExpressBundle\DataGrid\ExpressionVisitor\DoctrineExpressionVisitor;
 use Bilendi\DevExpressBundle\DataGrid\Search\SearchQuery;
+use Bilendi\DevExpressBundle\DataGrid\Search\SearchSort;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 
@@ -98,10 +99,10 @@ class DoctrineQueryHandler
      */
     public function addSorting(): DoctrineQueryHandler
     {
-        foreach ($this->searchQuery->getSort() as $sort) {
+        \Functional\each($this->searchQuery->getSort(), function (SearchSort $sort) {
             $this->queryBuilder->addOrderBy($this->transformField($sort->getField()),
                 $sort->isDesc() ? 'desc' : 'asc');
-        }
+        });
 
         return $this;
     }
