@@ -80,6 +80,9 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
      */
     protected function visitValue(ComparisonExpression $comparison)
     {
+        if ($date = \DateTime::createFromFormat('Y-m-d\TH:i:se', str_replace('.000Z', '+00:00', $comparison->getValue()))) {
+            return $date->setTimezone(new \DateTimezone(date_default_timezone_get()));
+        }
         if ($comparison->getOperator() === ComparisonExpression::CONTAINS || $comparison->getOperator() === ComparisonExpression::NOTCONTAINS) {
             return '%'.$comparison->getValue().'%';
         } elseif ($comparison->getOperator() === ComparisonExpression::STARTSWITH) {
@@ -106,11 +109,11 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
     /**
      * @param ComparisonExpression $comparison
      * @param string               $fieldName
-     * @param string               $value
+     * @param mixed                $value
      *
      * @return DoctrineComparison
      */
-    protected function visitComparisonWithNotNullValue(ComparisonExpression $comparison, string $fieldName, string $value)
+    protected function visitComparisonWithNotNullValue(ComparisonExpression $comparison, string $fieldName, $value)
     {
         $parameterName = 'p'.$this->parameters->count();
         $operand = ':'.$parameterName;
