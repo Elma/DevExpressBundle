@@ -17,8 +17,15 @@ class DoctrineExpressionVisitorTest extends TestCase
     public function testVisitComparisonGT()
     {
         $exp = new ComparisonExpression('f1', ComparisonExpression::GT, '2017-01-29T23:00:00.000Z');
-        $actual = $this->getVisitor()->visitComparison($exp);
+        $visitor = $this->getVisitor();
+        $actual = $visitor->visitComparison($exp);
         $expected = new Expr\Comparison('f1', DoctrineComparison::GT, ':p0');
+        $this->assertEquals($expected, $actual);
+
+        $this->assertEquals(1, count($visitor->getParameters()));
+
+        $expected = new \DateTime('2017-01-29T23:00:00.000');
+        $actual = $visitor->getParameters()[0]->getValue();
         $this->assertEquals($expected, $actual);
     }
 
