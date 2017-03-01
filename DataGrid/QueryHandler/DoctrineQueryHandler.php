@@ -61,7 +61,7 @@ class DoctrineQueryHandler
      */
     public function transformFieldCase(string $field, $visitedValue): string
     {
-        if (is_string($visitedValue) && !$this->queryConfig->isCaseSensitive()) {
+        if (!$this->queryConfig->isCaseSensitive() && is_string($visitedValue) && !is_numeric($visitedValue)) {
             $field = 'LOWER('.$field.')';
         }
 
