@@ -33,8 +33,8 @@ class DoctrineQueryHandler
      * DoctrineQueryHandler constructor.
      *
      * @param DoctrineQueryConfig $queryConfig
-     * @param QueryBuilder $queryBuilder
-     * @param SearchQuery $searchQuery
+     * @param QueryBuilder        $queryBuilder
+     * @param SearchQuery         $searchQuery
      */
     public function __construct(DoctrineQueryConfig $queryConfig, QueryBuilder $queryBuilder, SearchQuery $searchQuery)
     {
@@ -69,6 +69,7 @@ class DoctrineQueryHandler
 
     /**
      * @param string $value
+     *
      * @return string
      */
     public function transformValueCase(string $value): string
