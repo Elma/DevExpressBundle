@@ -56,6 +56,7 @@ class DoctrineQueryHandler
     /**
      * @param string $field
      * @param $visitedValue
+     *
      * @return string
      */
     public function transformFieldCase(string $field, $visitedValue): string
