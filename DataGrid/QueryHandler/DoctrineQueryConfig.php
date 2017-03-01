@@ -20,15 +20,22 @@ class DoctrineQueryConfig
     protected $defaultFilters = [];
 
     /**
+     * @var bool
+     */
+    protected $caseSensitive = false;
+
+
+    /**
      * DoctrineQueryConfig constructor.
-     *
      * @param array $fieldMapping
      * @param array $defaultFilters
+     * @param bool $caseSensitive
      */
-    public function __construct(array $fieldMapping = [], array $defaultFilters = [])
+    public function __construct(array $fieldMapping = [], array $defaultFilters = [], $caseSensitive = false)
     {
         $this->fieldMapping = $fieldMapping;
         $this->defaultFilters = $defaultFilters;
+        $this->caseSensitive = $caseSensitive;
     }
 
     /**
@@ -71,9 +78,29 @@ class DoctrineQueryConfig
     public function mapField(string $field)
     {
         if (array_key_exists($field, $this->fieldMapping)) {
-            return $this->fieldMapping[$field];
+            if ($this->isCaseSensitive() === true) {
+                return $this->fieldMapping[$field];
+            } else {
+                return 'LOWER(' . $this->fieldMapping[$field] . ')';
+            }
         }
 
         return $field;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCaseSensitive(): bool
+    {
+        return $this->caseSensitive;
+    }
+
+    /**
+     * @param boolean $caseSensitive
+     */
+    public function setCaseSensitive(bool $caseSensitive)
+    {
+        $this->caseSensitive = $caseSensitive;
     }
 }

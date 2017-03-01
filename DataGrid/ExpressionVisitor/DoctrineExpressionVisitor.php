@@ -82,15 +82,17 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
     {
         if ($date = \DateTime::createFromFormat('Y-m-d\TH:i:se', str_replace('.000Z', '+00:00', $comparison->getValue()))) {
             return $date->setTimezone(new \DateTimezone(date_default_timezone_get()));
-        }
-        if ($comparison->getOperator() === ComparisonExpression::CONTAINS || $comparison->getOperator() === ComparisonExpression::NOTCONTAINS) {
-            return '%'.$comparison->getValue().'%';
-        } elseif ($comparison->getOperator() === ComparisonExpression::STARTSWITH) {
-            return $comparison->getValue().'%';
-        } elseif ($comparison->getOperator() === ComparisonExpression::ENDSWITH) {
-            return '%'.$comparison->getValue();
         } else {
-            return $comparison->getValue();
+            $value = $comparison->getValue() ? $this->queryHandler->transformValueCase($comparison->getValue()) : null;
+            if ($comparison->getOperator() === ComparisonExpression::CONTAINS || $comparison->getOperator() === ComparisonExpression::NOTCONTAINS) {
+                return '%'.$value.'%';
+            } elseif ($comparison->getOperator() === ComparisonExpression::STARTSWITH) {
+                return $value.'%';
+            } elseif ($comparison->getOperator() === ComparisonExpression::ENDSWITH) {
+                return '%'.$value;
+            } else {
+                return $value;
+            }
         }
     }
 

@@ -22,6 +22,24 @@ class DoctrineQueryHandlerTest extends TestCase
         $handler->transformField('pouet');
     }
 
+    public function testTransformValueInsensitiveCase()
+    {
+        $config = $this->getConfigMock();
+        $config->method('isCaseSensitive')->willReturn(false);
+        $handler = new DoctrineQueryHandler($config, $this->getQBMock(), $this->getQueryMock());
+        $value = $handler->transformValueCase('CouCou');
+        $this->assertEquals('coucou', $value);
+    }
+
+    public function testTransformValueSensitiveCase()
+    {
+        $config = $this->getConfigMock();
+        $config->method('isCaseSensitive')->willReturn(true);
+        $handler = new DoctrineQueryHandler($config, $this->getQBMock(), $this->getQueryMock());
+        $value = $handler->transformValueCase('CouCou');
+        $this->assertEquals('CouCou', $value);
+    }
+
     public function testAddFilters()
     {
         $config = $this->getConfigMock();

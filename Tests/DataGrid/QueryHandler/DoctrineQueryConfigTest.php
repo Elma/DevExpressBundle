@@ -25,9 +25,20 @@ class DoctrineQueryConfigTest extends TestCase
         $this->assertEquals([new ComparisonExpression('lol', '>', 'mdr')], $config->getDefaultFilters());
     }
 
-    public function testMapFields()
+    public function testMapFieldsCaseInsensitive()
     {
         $config = new DoctrineQueryConfig();
+        $config->setFieldMapping([
+            'lol' => 'lol.pouet',
+        ]);
+        $this->assertEquals('LOWER(lol.pouet)', $config->mapField('lol'));
+        $this->assertEquals('hey', $config->mapField('hey'));
+    }
+
+    public function testMapFieldsCaseSensitive()
+    {
+        $config = new DoctrineQueryConfig();
+        $config->setCaseSensitive(true);
         $config->setFieldMapping([
             'lol' => 'lol.pouet',
         ]);

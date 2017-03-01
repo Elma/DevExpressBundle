@@ -33,8 +33,8 @@ class DoctrineQueryHandler
      * DoctrineQueryHandler constructor.
      *
      * @param DoctrineQueryConfig $queryConfig
-     * @param QueryBuilder        $queryBuilder
-     * @param SearchQuery         $searchQuery
+     * @param QueryBuilder $queryBuilder
+     * @param SearchQuery $searchQuery
      */
     public function __construct(DoctrineQueryConfig $queryConfig, QueryBuilder $queryBuilder, SearchQuery $searchQuery)
     {
@@ -51,6 +51,19 @@ class DoctrineQueryHandler
     public function transformField(string $field)
     {
         return $this->queryConfig->mapField($field);
+    }
+
+    /**
+     * @param string $value
+     * @return string
+     */
+    public function transformValueCase(string $value): string
+    {
+        if ($this->queryConfig->isCaseSensitive()) {
+            return $value;
+        } else {
+            return strtolower($value);
+        }
     }
 
     /**
@@ -82,14 +95,20 @@ class DoctrineQueryHandler
         }
 
         if (!$noDefaultFilter) {
-            \Functional\map($this->queryConfig->getDefaultFilters(), function (Visitable $comparison) use ($visitor) {
-                $this->queryBuilder->andWhere($comparison->visit($visitor));
-            });
+            \Functional\map(
+                $this->queryConfig->getDefaultFilters(),
+                function (Visitable $comparison) use ($visitor) {
+                    $this->queryBuilder->andWhere($comparison->visit($visitor));
+                }
+            );
         }
 
-        \Functional\map($visitor->getParameters(), function (Parameter $parameter) {
-            $this->queryBuilder->setParameter($parameter->getName(), $parameter->getValue());
-        });
+        \Functional\map(
+            $visitor->getParameters(),
+            function (Parameter $parameter) {
+                $this->queryBuilder->setParameter($parameter->getName(), $parameter->getValue());
+            }
+        );
 
         return $this;
     }
@@ -99,10 +118,15 @@ class DoctrineQueryHandler
      */
     public function addSorting(): DoctrineQueryHandler
     {
-        \Functional\each($this->searchQuery->getSort(), function (SearchSort $sort) {
-            $this->queryBuilder->addOrderBy($this->transformField($sort->getField()),
-                $sort->isDesc() ? 'desc' : 'asc');
-        });
+        \Functional\each(
+            $this->searchQuery->getSort(),
+            function (SearchSort $sort) {
+                $this->queryBuilder->addOrderBy(
+                    $this->transformField($sort->getField()),
+                    $sort->isDesc() ? 'desc' : 'asc'
+                );
+            }
+        );
 
         return $this;
     }
