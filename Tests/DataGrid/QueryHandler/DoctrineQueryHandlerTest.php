@@ -94,7 +94,7 @@ class DoctrineQueryHandlerTest extends TestCase
         $qb = $this->getQBMock();
         $qb->expects($this->once())
             ->method('andWhere')
-            ->with(new Expr\Comparison('LOWER(coucou)', DoctrineComparison::GT, ':p0'));
+            ->with(new Expr\Comparison('coucou', DoctrineComparison::GT, ':p0'));
 
         $qb->expects($this->once())
             ->method('setParameter')
