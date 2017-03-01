@@ -102,9 +102,9 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
         }
     }
 
-
     /**
      * @param ComparisonExpression $comparisonExpression
+     *
      * @return string
      */
     protected function visitField(ComparisonExpression $comparisonExpression, $visitedValue): string
@@ -113,13 +113,14 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
         $this->usedFields->add($field);
 
         $mappedField = $this->queryHandler->transformField($field);
+
         return $this->queryHandler->transformFieldCase($mappedField, $visitedValue);
     }
 
     /**
      * @param ComparisonExpression $comparison
-     * @param string $fieldName
-     * @param mixed $value
+     * @param string               $fieldName
+     * @param mixed                $value
      *
      * @return DoctrineComparison
      */
@@ -155,7 +156,7 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
 
     /**
      * @param ComparisonExpression $comparison
-     * @param string $fieldName
+     * @param string               $fieldName
      *
      * @return string
      */
@@ -190,7 +191,7 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
 
     /**
      * @param string $type
-     * @param array $expressions
+     * @param array  $expressions
      *
      * @return Andx|Orx
      */
