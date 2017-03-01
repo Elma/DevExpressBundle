@@ -31,7 +31,7 @@ class DoctrineQueryConfigTest extends TestCase
         $config->setFieldMapping([
             'lol' => 'lol.pouet',
         ]);
-        $this->assertEquals('LOWER(lol.pouet)', $config->mapField('lol'));
+        $this->assertEquals('lol.pouet', $config->mapField('lol'));
         $this->assertEquals('hey', $config->mapField('hey'));
     }
 

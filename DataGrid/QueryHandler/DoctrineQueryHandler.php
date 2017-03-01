@@ -54,6 +54,20 @@ class DoctrineQueryHandler
     }
 
     /**
+     * @param string $field
+     * @param $visitedValue
+     * @return string
+     */
+    public function transformFieldCase(string $field, $visitedValue): string
+    {
+        if (is_string($visitedValue) && !$this->queryConfig->isCaseSensitive()) {
+            $field = 'LOWER('.$field.')';
+        }
+
+        return $field;
+    }
+
+    /**
      * @param string $value
      * @return string
      */

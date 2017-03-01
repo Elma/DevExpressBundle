@@ -16,7 +16,6 @@
     <filter>
         <whitelist>
             <directory>DataGrid</directory>
-            <directory>DependencyInjection</directory>
             <exclude>
                 <directory>Tests</directory>
             </exclude>

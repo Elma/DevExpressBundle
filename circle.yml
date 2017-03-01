@@ -10,4 +10,4 @@ dependencies:
 
 test:
     override:
-        - ./vendor/bin/phpunit 
+        - ./vendor/bin/phpunit --coverage-text

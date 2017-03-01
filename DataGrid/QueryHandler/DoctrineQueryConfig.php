@@ -78,11 +78,7 @@ class DoctrineQueryConfig
     public function mapField(string $field)
     {
         if (array_key_exists($field, $this->fieldMapping)) {
-            if ($this->isCaseSensitive() === true) {
-                return $this->fieldMapping[$field];
-            } else {
-                return 'LOWER(' . $this->fieldMapping[$field] . ')';
-            }
+            return $this->fieldMapping[$field];
         }
 
         return $field;

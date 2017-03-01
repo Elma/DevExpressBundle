@@ -80,11 +80,17 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
      */
     protected function visitValue(ComparisonExpression $comparison)
     {
-        if ($date = \DateTime::createFromFormat('Y-m-d\TH:i:se', str_replace('.000Z', '+00:00', $comparison->getValue()))) {
+        if ($date = \DateTime::createFromFormat(
+            'Y-m-d\TH:i:se',
+            str_replace('.000Z', '+00:00', $comparison->getValue())
+        )
+        ) {
             return $date->setTimezone(new \DateTimezone(date_default_timezone_get()));
         } else {
             $value = $comparison->getValue() ? $this->queryHandler->transformValueCase($comparison->getValue()) : null;
-            if ($comparison->getOperator() === ComparisonExpression::CONTAINS || $comparison->getOperator() === ComparisonExpression::NOTCONTAINS) {
+            if ($comparison->getOperator() === ComparisonExpression::CONTAINS || $comparison->getOperator(
+                ) === ComparisonExpression::NOTCONTAINS
+            ) {
                 return '%'.$value.'%';
             } elseif ($comparison->getOperator() === ComparisonExpression::STARTSWITH) {
                 return $value.'%';
@@ -96,22 +102,24 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
         }
     }
 
+
     /**
-     * @param $field
-     *
+     * @param ComparisonExpression $comparisonExpression
      * @return string
      */
-    protected function visitField(string $field)
+    protected function visitField(ComparisonExpression $comparisonExpression, $visitedValue): string
     {
+        $field = $comparisonExpression->getField();
         $this->usedFields->add($field);
 
-        return $this->queryHandler->transformField($field);
+        $mappedField = $this->queryHandler->transformField($field);
+        return $this->queryHandler->transformFieldCase($mappedField, $visitedValue);
     }
 
     /**
      * @param ComparisonExpression $comparison
-     * @param string               $fieldName
-     * @param mixed                $value
+     * @param string $fieldName
+     * @param mixed $value
      *
      * @return DoctrineComparison
      */
@@ -147,7 +155,7 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
 
     /**
      * @param ComparisonExpression $comparison
-     * @param string               $fieldName
+     * @param string $fieldName
      *
      * @return string
      */
@@ -171,8 +179,7 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
     public function visitComparison(ComparisonExpression $comparison)
     {
         $value = $this->visitValue($comparison);
-        $field = $comparison->getField();
-        $fieldName = $this->visitField($field);
+        $fieldName = $this->visitField($comparison, $value);
 
         if ($value !== null) {
             return $this->visitComparisonWithNotNullValue($comparison, $fieldName, $value);
@@ -183,7 +190,7 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
 
     /**
      * @param string $type
-     * @param array  $expressions
+     * @param array $expressions
      *
      * @return Andx|Orx
      */

@@ -22,6 +22,21 @@ class DoctrineQueryHandlerTest extends TestCase
         $handler->transformField('pouet');
     }
 
+    public function testTransformFieldInsensitiveCase()
+    {
+        $config = $this->getConfigMock();
+        $handler = new DoctrineQueryHandler($config, $this->getQBMock(), $this->getQueryMock());
+        $this->assertEquals('LOWER(pouet)', $handler->transformFieldCase('pouet', 'coucou'));
+    }
+
+    public function testTransformFieldSensitiveCase()
+    {
+        $config = $this->getConfigMock();
+        $config->method('isCaseSensitive')->willReturn(true);
+        $handler = new DoctrineQueryHandler($config, $this->getQBMock(), $this->getQueryMock());
+        $this->assertEquals('pouet', $handler->transformFieldCase('pouet', 'coucou'));
+    }
+
     public function testTransformValueInsensitiveCase()
     {
         $config = $this->getConfigMock();
@@ -55,7 +70,7 @@ class DoctrineQueryHandlerTest extends TestCase
         $qb = $this->getQBMock();
         $qb->expects($this->once())
             ->method('andWhere')
-            ->with(new Expr\Comparison('lol', DoctrineComparison::GT, ':p0'));
+            ->with(new Expr\Comparison('LOWER(lol)', DoctrineComparison::GT, ':p0'));
 
         $qb->expects($this->once())
             ->method('setParameter')
@@ -79,7 +94,7 @@ class DoctrineQueryHandlerTest extends TestCase
         $qb = $this->getQBMock();
         $qb->expects($this->once())
             ->method('andWhere')
-            ->with(new Expr\Comparison('coucou', DoctrineComparison::GT, ':p0'));
+            ->with(new Expr\Comparison('LOWER(coucou)', DoctrineComparison::GT, ':p0'));
 
         $qb->expects($this->once())
             ->method('setParameter')
