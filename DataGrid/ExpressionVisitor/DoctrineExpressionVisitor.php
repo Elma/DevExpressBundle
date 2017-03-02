@@ -87,7 +87,7 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
         ) {
             return $date->setTimezone(new \DateTimezone(date_default_timezone_get()));
         } else {
-            $value = $comparison->getValue() ? $this->queryHandler->transformValueCase($comparison->getValue()) : null;
+            $value = $comparison->getValue() === null ? $this->queryHandler->transformValueCase($comparison->getValue()) : null;
             if ($comparison->getOperator() === ComparisonExpression::CONTAINS || $comparison->getOperator(
                 ) === ComparisonExpression::NOTCONTAINS
             ) {
