@@ -117,7 +117,7 @@ class SearchQueryParser
     }
 
     /**
-     * @param array $filter
+     * @param array                    $filter
      * @param CompositeExpression|null $parent
      *
      * @return Visitable
@@ -144,7 +144,7 @@ class SearchQueryParser
                     $newComposite = new CompositeExpression(CompositeExpression::TYPE_OR, []);
                 }
                 if ($parent !== null) {
-                    if (count($filter[0]) > 1 && count($parent->getExpressions())=== 0) {
+                    if (count($filter[0]) > 1 && count($parent->getExpressions()) === 0) {
                         $newComposite->addExpression($this->parseDisjunction($first, $newComposite));
 
                         return $this->parseDisjunction($filter, $newComposite);

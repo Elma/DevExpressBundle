@@ -291,15 +291,15 @@ class SearchQueryParserTest extends TestCase
         $parser = new SearchQueryParser();
         $filter = [
             [
-                ["projectManager", "contains", "test"],
-                "and",
-                ["seller", "contains", "test"]
+                ['projectManager', 'contains', 'test'],
+                'and',
+                ['seller', 'contains', 'test'],
             ],
-            "and",
+            'and',
             [
-                ["status", "=", "RG"],
-                "or",
-                ["status", "=", "HD"]
+                ['status', '=', 'RG'],
+                'or',
+                ['status', '=', 'HD'],
             ],
         ];
         $actual = $parser->parseDisjunction($filter);
