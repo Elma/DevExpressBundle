@@ -106,7 +106,9 @@ class SearchQueryParserTest extends TestCase
     {
         $parser = new SearchQueryParser();
         $filter = [
-            'number', '<>', 0,
+            'number',
+            '<>',
+            0,
         ];
         $actual = $parser->parseDisjunction($filter);
         $expected = new ComparisonExpression('number', '<>', 0);
@@ -139,12 +141,15 @@ class SearchQueryParserTest extends TestCase
             ['pouet', '>', 'lol'],
             'or',
             ['yo', '=', 'salut'],
+            'or',
+            ['ui', '=', 'ui'],
         ];
         $actual = $parser->parseDisjunction($filter);
         $exps = [
             new ComparisonExpression('number', '<>', 0),
             new ComparisonExpression('pouet', '>', 'lol'),
             new ComparisonExpression('yo', '=', 'salut'),
+            new ComparisonExpression('ui', '=', 'ui'),
         ];
         $expected = new CompositeExpression(CompositeExpression::TYPE_OR, $exps);
         $this->assertEquals($expected, $actual);
@@ -205,10 +210,12 @@ class SearchQueryParserTest extends TestCase
             new ComparisonExpression('yo', '=', 'salut'),
         ];
         $compositeOr = new CompositeExpression(CompositeExpression::TYPE_OR, $expOr);
-        $expected = new CompositeExpression(CompositeExpression::TYPE_AND, [
-            new ComparisonExpression('number', '<>', 0),
-            $compositeOr,
-        ]);
+        $expected = new CompositeExpression(
+            CompositeExpression::TYPE_AND, [
+                new ComparisonExpression('number', '<>', 0),
+                $compositeOr,
+            ]
+        );
         $this->assertEquals($expected, $actual);
     }
 
@@ -230,14 +237,16 @@ class SearchQueryParserTest extends TestCase
             new ComparisonExpression('yo', '=', 'salut'),
         ];
         $compositeAnd = new CompositeExpression(CompositeExpression::TYPE_AND, $expAnd);
-        $expected = new CompositeExpression(CompositeExpression::TYPE_OR, [
-            new ComparisonExpression('number', '<>', 0),
-            $compositeAnd,
-        ]);
+        $expected = new CompositeExpression(
+            CompositeExpression::TYPE_OR, [
+                new ComparisonExpression('number', '<>', 0),
+                $compositeAnd,
+            ]
+        );
         $this->assertEquals($expected, $actual);
     }
 
-    public function testWTF()
+    public function testDisjunctionDepth3()
     {
         $parser = new SearchQueryParser();
         $filter = [
@@ -261,15 +270,58 @@ class SearchQueryParserTest extends TestCase
         ];
         $nestedOr = new CompositeExpression(CompositeExpression::TYPE_OR, $expNestedOr);
 
-        $compositeAnd = new CompositeExpression(CompositeExpression::TYPE_AND, [
-            new ComparisonExpression('pouet', '>', 'lol'),
-            $nestedOr,
-        ]);
+        $compositeAnd = new CompositeExpression(
+            CompositeExpression::TYPE_AND, [
+                new ComparisonExpression('pouet', '>', 'lol'),
+                $nestedOr,
+            ]
+        );
 
-        $expected = new CompositeExpression(CompositeExpression::TYPE_OR, [
-            new ComparisonExpression('number', '<>', 0),
-            $compositeAnd,
-        ]);
+        $expected = new CompositeExpression(
+            CompositeExpression::TYPE_OR, [
+                new ComparisonExpression('number', '<>', 0),
+                $compositeAnd,
+            ]
+        );
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testDisjunctionSPM()
+    {
+        $parser = new SearchQueryParser();
+        $filter = [
+            [
+                ["projectManager", "contains", "test"],
+                "and",
+                ["seller", "contains", "test"]
+            ],
+            "and",
+            [
+                ["status", "=", "RG"],
+                "or",
+                ["status", "=", "HD"]
+            ],
+        ];
+        $actual = $parser->parseDisjunction($filter);
+
+        $expNestedOr = [
+            new ComparisonExpression('status', '=', 'RG'),
+            new ComparisonExpression('status', '=', 'HD'),
+        ];
+        $nestedOr = new CompositeExpression(CompositeExpression::TYPE_OR, $expNestedOr);
+
+        $expNestedAnd = [
+            new ComparisonExpression('projectManager', 'contains', 'test'),
+            new ComparisonExpression('seller', 'contains', 'test'),
+        ];
+        $nestedAnd = new CompositeExpression(CompositeExpression::TYPE_AND, $expNestedAnd);
+
+        $expected = new CompositeExpression(
+            CompositeExpression::TYPE_AND, [
+                $nestedAnd,
+                $nestedOr,
+            ]
+        );
         $this->assertEquals($expected, $actual);
     }
 }

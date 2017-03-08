@@ -95,9 +95,12 @@ class SearchQueryParser
     public function parseSort(\stdClass $data)
     {
         if (is_array($data->sort)) {
-            \Functional\map($data->sort, function (\stdClass $sort) {
-                $this->builder->sort($sort->selector, $sort->desc);
-            });
+            \Functional\map(
+                $data->sort,
+                function (\stdClass $sort) {
+                    $this->builder->sort($sort->selector, $sort->desc);
+                }
+            );
         } else {
             throw new NotArrayException('sort');
         }
@@ -114,7 +117,7 @@ class SearchQueryParser
     }
 
     /**
-     * @param array                    $filter
+     * @param array $filter
      * @param CompositeExpression|null $parent
      *
      * @return Visitable
@@ -134,26 +137,26 @@ class SearchQueryParser
         } elseif (count($filter) >= 3) {
             $first = array_shift($filter);
             $second = array_shift($filter);
-            if ($second == 'and' || $second == 'or') {
-                if ($parent !== null && $parent->getType() !== $second) {
-                    $parent->addExpression($this->parseComparison($first));
-
-                    return $parent;
+            if ($second === 'and' || $second === 'or') {
+                if ($second === 'and') {
+                    $newComposite = new CompositeExpression(CompositeExpression::TYPE_AND, []);
                 } else {
-                    if ($second == 'and') {
-                        $newComposite = new CompositeExpression(CompositeExpression::TYPE_AND, []);
-                    } else {
-                        $newComposite = new CompositeExpression(CompositeExpression::TYPE_OR, []);
-                    }
-                    if ($parent !== null) {
-                        $parent->addExpression($this->parseDisjunction($first, $newComposite));
-
-                        return $this->parseDisjunction($filter, $parent);
-                    } else {
+                    $newComposite = new CompositeExpression(CompositeExpression::TYPE_OR, []);
+                }
+                if ($parent !== null) {
+                    if (count($filter[0]) > 1 && count($parent->getExpressions())=== 0) {
                         $newComposite->addExpression($this->parseDisjunction($first, $newComposite));
 
                         return $this->parseDisjunction($filter, $newComposite);
+                    } else {
+                        $parent->addExpression($this->parseDisjunction($first, $newComposite));
+
+                        return $this->parseDisjunction($filter, $parent);
                     }
+                } else {
+                    $newComposite->addExpression($this->parseDisjunction($first, $newComposite));
+
+                    return $this->parseDisjunction($filter, $newComposite);
                 }
             } else {
                 return $this->parseComparison([$first, $second, $filter[0]]);
