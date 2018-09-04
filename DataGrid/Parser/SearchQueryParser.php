@@ -161,9 +161,20 @@ class SearchQueryParser
             } else {
                 return $this->parseComparison([$first, $second, $filter[0]]);
             }
-        } else {
-            throw new \Exception('Error for format filter:'.print_r($filter, true));
+        } else if (count($filter) == 2) {
+            $first = array_shift($filter);
+            $second = array_shift($filter);
+
+            if($first === '!') {
+                $newComposite = new CompositeExpression(CompositeExpression::TYPE_NOT, []);
+
+                $newComposite->addExpression($this->parseDisjunction($second, $newComposite));
+
+                return $newComposite;
+            }
         }
+
+        throw new \Exception('Error for format filter:'.print_r($filter, true));
     }
 
     /**

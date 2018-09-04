@@ -11,6 +11,7 @@ class CompositeExpression implements Visitable
 {
     const TYPE_AND = 'and';
     const TYPE_OR = 'or';
+    const TYPE_NOT = 'not';
 
     /**
      * @var string

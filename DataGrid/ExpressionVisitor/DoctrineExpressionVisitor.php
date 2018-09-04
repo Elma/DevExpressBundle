@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\Orx;
+use Doctrine\ORM\Query\Expr\Func;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\Query\Expr\Comparison as DoctrineComparison;
 
@@ -193,7 +194,7 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
      * @param string $type
      * @param array  $expressions
      *
-     * @return Andx|Orx
+     * @return Andx|Orx|Func
      */
     public function visitProcessedCompositeExpression(string $type, array $expressions)
     {
@@ -202,6 +203,8 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
                 return new Andx($expressions);
             case CompositeExpression::TYPE_OR:
                 return new Orx($expressions);
+            case CompositeExpression::TYPE_NOT:
+                return new Func("not", $expressions);
             default:
                 throw new UnknownCompositeException($type);
         }
