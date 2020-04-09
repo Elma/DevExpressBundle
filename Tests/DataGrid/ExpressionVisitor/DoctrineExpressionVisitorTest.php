@@ -24,7 +24,7 @@ class DoctrineExpressionVisitorTest extends TestCase
 
         $this->assertEquals(1, count($visitor->getParameters()));
 
-        $expected = new \DateTime('2017-01-29T23:00:00.000');
+        $expected = new \DateTime('2017-01-29T23:00:00.000Z');
         $actual = $visitor->getParameters()[0]->getValue();
         $this->assertEquals($expected, $actual);
     }
