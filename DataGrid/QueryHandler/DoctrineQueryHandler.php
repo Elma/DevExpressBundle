@@ -78,7 +78,7 @@ class DoctrineQueryHandler
         if ($this->queryConfig->isCaseSensitive()) {
             return $value;
         } else {
-            return strtolower($value);
+            return mb_strtolower($value, 'UTF-8');
         }
     }
 
