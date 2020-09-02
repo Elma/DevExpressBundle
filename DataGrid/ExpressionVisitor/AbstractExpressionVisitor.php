@@ -12,23 +12,18 @@ use Bilendi\DevExpressBundle\DataGrid\Expression\Visitable;
 abstract class AbstractExpressionVisitor
 {
     /**
-     * @param ComparisonExpression $comparison
-     *
      * @return mixed
      */
     abstract public function visitComparison(ComparisonExpression $comparison);
 
     /**
      * @param $type
-     * @param array $expressions
      *
      * @return mixed
      */
     abstract public function visitProcessedCompositeExpression(string $type, array $expressions);
 
     /**
-     * @param CompositeExpression $compositeExpression
-     *
      * @return mixed
      */
     public function visitCompositeExpression(CompositeExpression $compositeExpression)
@@ -37,7 +32,7 @@ abstract class AbstractExpressionVisitor
             return $expr->visit($this);
         });
         $expressions = \Functional\filter($expressions, function ($expr) {
-            return $expr !== null;
+            return null !== $expr;
         });
 
         return $this->visitProcessedCompositeExpression($compositeExpression->getType(), $expressions);

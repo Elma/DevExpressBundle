@@ -27,9 +27,7 @@ class DoctrineQueryConfig
     /**
      * DoctrineQueryConfig constructor.
      *
-     * @param array $fieldMapping
-     * @param array $defaultFilters
-     * @param bool  $caseSensitive
+     * @param bool $caseSensitive
      */
     public function __construct(array $fieldMapping = [], array $defaultFilters = [], $caseSensitive = false)
     {
@@ -46,33 +44,22 @@ class DoctrineQueryConfig
         return $this->defaultFilters;
     }
 
-    /**
-     * @param array $defaultFilters
-     */
     public function setDefaultFilters(array $defaultFilters)
     {
         $this->defaultFilters = $defaultFilters;
     }
 
-    /**
-     * @return array
-     */
     public function getFieldMapping(): array
     {
         return $this->fieldMapping;
     }
 
-    /**
-     * @param array $fieldMapping
-     */
     public function setFieldMapping(array $fieldMapping)
     {
         $this->fieldMapping = $fieldMapping;
     }
 
     /**
-     * @param string $field
-     *
      * @return string
      */
     public function mapField(string $field)
@@ -84,17 +71,11 @@ class DoctrineQueryConfig
         return $field;
     }
 
-    /**
-     * @return bool
-     */
     public function isCaseSensitive(): bool
     {
         return $this->caseSensitive;
     }
 
-    /**
-     * @param bool $caseSensitive
-     */
     public function setCaseSensitive(bool $caseSensitive)
     {
         $this->caseSensitive = $caseSensitive;

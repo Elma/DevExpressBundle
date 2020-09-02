@@ -41,25 +41,19 @@ class SearchQuery
     {
         $this->filter = $filter;
         $this->sort = $sort;
-        if ($this->startIndex !== null) {
+        if (null !== $this->startIndex) {
             $this->startIndex = (int) $startIndex;
         }
-        if ($maxResults !== null) {
+        if (null !== $maxResults) {
             $this->maxResults = (int) $maxResults;
         }
     }
 
-    /**
-     * @return Visitable
-     */
     public function getFilter(): Visitable
     {
         return $this->filter;
     }
 
-    /**
-     * @param Visitable $filter
-     */
     public function setFilter(Visitable $filter)
     {
         $this->filter = $filter;
@@ -73,25 +67,16 @@ class SearchQuery
         return $this->sort;
     }
 
-    /**
-     * @param array $sort
-     */
     public function setSort(array $sort)
     {
         $this->sort = $sort;
     }
 
-    /**
-     * @return int
-     */
     public function getStartIndex(): int
     {
         return $this->startIndex;
     }
 
-    /**
-     * @param int $startIndex
-     */
     public function setStartIndex(int $startIndex)
     {
         $this->startIndex = $startIndex;

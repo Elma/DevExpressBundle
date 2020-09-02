@@ -52,17 +52,11 @@ class SearchQueryBuilder
         return new SearchQuery($filters, $this->sortings, $this->startIndex, $this->maxResults);
     }
 
-    /**
-     * @return array
-     */
     public function getFilters(): array
     {
         return $this->filters;
     }
 
-    /**
-     * @return int
-     */
     public function getStartIndex(): int
     {
         return $this->startIndex;
@@ -74,8 +68,6 @@ class SearchQueryBuilder
     }
 
     /**
-     * @param array $filters
-     *
      * @return $this
      */
     public function setFilters(array $filters)
@@ -85,17 +77,12 @@ class SearchQueryBuilder
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getSortings(): array
     {
         return $this->sortings;
     }
 
     /**
-     * @param int $startIndex
-     *
      * @return $this
      */
     public function setStartIndex(int $startIndex)
@@ -118,9 +105,6 @@ class SearchQueryBuilder
     }
 
     /**
-     * @param string $field
-     * @param bool   $desc
-     *
      * @return $this
      */
     public function sort(string $field, bool $desc)
@@ -131,8 +115,6 @@ class SearchQueryBuilder
     }
 
     /**
-     * @param Visitable $expression
-     *
      * @return $this
      */
     public function filter(Visitable $expression)

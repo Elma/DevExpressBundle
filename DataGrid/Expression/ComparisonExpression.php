@@ -30,17 +30,11 @@ class ComparisonExpression implements Visitable
      */
     protected $operator;
 
-    /**
-     * @return string
-     */
     public function getField(): string
     {
         return $this->field;
     }
 
-    /**
-     * @return string
-     */
     public function getOperator(): string
     {
         return $this->operator;
@@ -62,8 +56,6 @@ class ComparisonExpression implements Visitable
     /**
      * ComparisonExpression constructor.
      *
-     * @param string $field
-     * @param string $operator
      * @param $value
      */
     public function __construct(string $field, string $operator, $value)
@@ -74,8 +66,6 @@ class ComparisonExpression implements Visitable
     }
 
     /**
-     * @param AbstractExpressionVisitor $visitor
-     *
      * @return mixed
      */
     public function visit(AbstractExpressionVisitor $visitor)

@@ -31,10 +31,6 @@ class DoctrineQueryHandler
 
     /**
      * DoctrineQueryHandler constructor.
-     *
-     * @param DoctrineQueryConfig $queryConfig
-     * @param QueryBuilder        $queryBuilder
-     * @param SearchQuery         $searchQuery
      */
     public function __construct(DoctrineQueryConfig $queryConfig, QueryBuilder $queryBuilder, SearchQuery $searchQuery)
     {
@@ -44,8 +40,6 @@ class DoctrineQueryHandler
     }
 
     /**
-     * @param string $field
-     *
      * @return string
      */
     public function transformField(string $field)
@@ -54,10 +48,7 @@ class DoctrineQueryHandler
     }
 
     /**
-     * @param string $field
      * @param $visitedValue
-     *
-     * @return string
      */
     public function transformFieldCase(string $field, $visitedValue): string
     {
@@ -68,11 +59,6 @@ class DoctrineQueryHandler
         return $field;
     }
 
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
     public function transformValueCase(string $value): string
     {
         if ($this->queryConfig->isCaseSensitive()) {
@@ -98,15 +84,13 @@ class DoctrineQueryHandler
 
     /**
      * @param bool $noDefaultFilter
-     *
-     * @return DoctrineQueryHandler
      */
     public function addFilters($noDefaultFilter = false): DoctrineQueryHandler
     {
         $visitor = new DoctrineExpressionVisitor($this);
         $filters = $this->searchQuery->getFilter()->visit($visitor);
 
-        if ($filters !== null) {
+        if (null !== $filters) {
             $this->queryBuilder->andWhere($filters);
         }
 
@@ -129,9 +113,6 @@ class DoctrineQueryHandler
         return $this;
     }
 
-    /**
-     * @return DoctrineQueryHandler
-     */
     public function addSorting(): DoctrineQueryHandler
     {
         \Functional\each(
@@ -147,13 +128,10 @@ class DoctrineQueryHandler
         return $this;
     }
 
-    /**
-     * @return QueryBuilder
-     */
     public function addPagination(): QueryBuilder
     {
         $this->queryBuilder->setFirstResult($this->searchQuery->getStartIndex());
-        if (($maxResults = $this->searchQuery->getMaxResults()) !== null) {
+        if (null !== ($maxResults = $this->searchQuery->getMaxResults())) {
             $this->queryBuilder->setMaxResults($maxResults);
         }
 
