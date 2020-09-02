@@ -46,8 +46,6 @@ class CompositeExpression implements Visitable
     }
 
     /**
-     * @param Visitable $expression
-     *
      * @return $this
      */
     public function addExpression(Visitable $expression)
@@ -57,9 +55,6 @@ class CompositeExpression implements Visitable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;

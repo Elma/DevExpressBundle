@@ -19,9 +19,6 @@ class SearchSort
 
     /**
      * SearchSort constructor.
-     *
-     * @param string $field
-     * @param bool   $desc
      */
     public function __construct(string $field, bool $desc)
     {

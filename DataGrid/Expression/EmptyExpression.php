@@ -10,8 +10,6 @@ use Bilendi\DevExpressBundle\DataGrid\ExpressionVisitor\AbstractExpressionVisito
 class EmptyExpression implements Visitable
 {
     /**
-     * @param AbstractExpressionVisitor $visitor
-     *
      * @return mixed
      */
     public function visit(AbstractExpressionVisitor $visitor)

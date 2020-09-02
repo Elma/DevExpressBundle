@@ -28,19 +28,11 @@ class SearchQueryParser
         $this->builder = new SearchQueryBuilder();
     }
 
-    /**
-     * @return SearchQueryBuilder
-     */
     public function getBuilder(): SearchQueryBuilder
     {
         return $this->builder;
     }
 
-    /**
-     * @param \stdClass $data
-     *
-     * @return SearchQuery
-     */
     public function parse(\stdClass $data): SearchQuery
     {
         if (isset($data->take)) {
@@ -60,8 +52,6 @@ class SearchQueryParser
     }
 
     /**
-     * @param \stdClass $data
-     *
      * @throws NotNumericException
      */
     public function parseStartIndex(\stdClass $data)
@@ -74,8 +64,6 @@ class SearchQueryParser
     }
 
     /**
-     * @param \stdClass $data
-     *
      * @throws NotNumericException
      */
     public function parseMaxResults(\stdClass $data)
@@ -88,8 +76,6 @@ class SearchQueryParser
     }
 
     /**
-     * @param \stdClass $data
-     *
      * @throws NotArrayException
      */
     public function parseSort(\stdClass $data)
@@ -106,28 +92,18 @@ class SearchQueryParser
         }
     }
 
-    /**
-     * @param array $filter
-     *
-     * @return ComparisonExpression
-     */
     public function parseComparison(array $filter): ComparisonExpression
     {
         return new ComparisonExpression($filter[0], $filter[1], $filter[2]);
     }
 
     /**
-     * @param array                    $filter
-     * @param CompositeExpression|null $parent
-     *
-     * @return Visitable
-     *
      * @throws \Exception
      */
     public function parseDisjunction(array $filter, CompositeExpression $parent = null): Visitable
     {
-        if (count($filter) == 1) {
-            if ($parent === null) {
+        if (1 == count($filter)) {
+            if (null === $parent) {
                 return $this->parseComparison(array_shift($filter));
             } else {
                 $parent->addExpression($this->parseDisjunction(array_shift($filter)));
@@ -137,14 +113,14 @@ class SearchQueryParser
         } elseif (count($filter) >= 3) {
             $first = array_shift($filter);
             $second = array_shift($filter);
-            if ($second === 'and' || $second === 'or') {
-                if ($second === 'and') {
+            if ('and' === $second || 'or' === $second) {
+                if ('and' === $second) {
                     $newComposite = new CompositeExpression(CompositeExpression::TYPE_AND, []);
                 } else {
                     $newComposite = new CompositeExpression(CompositeExpression::TYPE_OR, []);
                 }
-                if ($parent !== null) {
-                    if (count($filter[0]) > 1 && count($parent->getExpressions()) === 0) {
+                if (null !== $parent) {
+                    if (count($filter[0]) > 1 && 0 === count($parent->getExpressions())) {
                         $newComposite->addExpression($this->parseDisjunction($first, $newComposite));
 
                         return $this->parseDisjunction($filter, $newComposite);
@@ -161,11 +137,11 @@ class SearchQueryParser
             } else {
                 return $this->parseComparison([$first, $second, $filter[0]]);
             }
-        } else if (count($filter) == 2) {
+        } elseif (2 == count($filter)) {
             $first = array_shift($filter);
             $second = array_shift($filter);
 
-            if($first === '!') {
+            if ('!' === $first) {
                 $newComposite = new CompositeExpression(CompositeExpression::TYPE_NOT, []);
 
                 $newComposite->addExpression($this->parseDisjunction($second, $newComposite));
@@ -178,8 +154,6 @@ class SearchQueryParser
     }
 
     /**
-     * @param \stdClass $data
-     *
      * @throws NotArrayException
      */
     public function parseFilter(\stdClass $data)

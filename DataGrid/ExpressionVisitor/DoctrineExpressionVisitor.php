@@ -53,8 +53,6 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
 
     /**
      * DoctrineExpressionVisitor constructor.
-     *
-     * @param DoctrineQueryHandler $queryHandler
      */
     public function __construct(DoctrineQueryHandler $queryHandler)
     {
@@ -75,8 +73,6 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
     }
 
     /**
-     * @param ComparisonExpression $comparison
-     *
      * @return mixed|string
      */
     protected function visitValue(ComparisonExpression $comparison)
@@ -88,14 +84,14 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
         ) {
             return $date->setTimezone(new \DateTimezone(date_default_timezone_get()));
         } else {
-            $value = $comparison->getValue() !== null ? $this->queryHandler->transformValueCase($comparison->getValue()) : null;
-            if ($comparison->getOperator() === ComparisonExpression::CONTAINS || $comparison->getOperator(
-                ) === ComparisonExpression::NOTCONTAINS
+            $value = null !== $comparison->getValue() ? $this->queryHandler->transformValueCase($comparison->getValue()) : null;
+            if (ComparisonExpression::CONTAINS === $comparison->getOperator() || ComparisonExpression::NOTCONTAINS === $comparison->getOperator(
+                )
             ) {
                 return '%'.$value.'%';
-            } elseif ($comparison->getOperator() === ComparisonExpression::STARTSWITH) {
+            } elseif (ComparisonExpression::STARTSWITH === $comparison->getOperator()) {
                 return $value.'%';
-            } elseif ($comparison->getOperator() === ComparisonExpression::ENDSWITH) {
+            } elseif (ComparisonExpression::ENDSWITH === $comparison->getOperator()) {
                 return '%'.$value;
             } else {
                 return $value;
@@ -103,11 +99,6 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
         }
     }
 
-    /**
-     * @param ComparisonExpression $comparisonExpression
-     *
-     * @return string
-     */
     protected function visitField(ComparisonExpression $comparisonExpression, $visitedValue): string
     {
         $field = $comparisonExpression->getField();
@@ -119,9 +110,7 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
     }
 
     /**
-     * @param ComparisonExpression $comparison
-     * @param string               $fieldName
-     * @param mixed                $value
+     * @param mixed $value
      *
      * @return DoctrineComparison
      */
@@ -156,9 +145,6 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
     }
 
     /**
-     * @param ComparisonExpression $comparison
-     * @param string               $fieldName
-     *
      * @return string
      */
     protected function visitComparisonWithNullValue(ComparisonExpression $comparison, string $fieldName)
@@ -174,8 +160,6 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
     }
 
     /**
-     * @param ComparisonExpression $comparison
-     *
      * @return DoctrineComparison
      */
     public function visitComparison(ComparisonExpression $comparison)
@@ -183,7 +167,7 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
         $value = $this->visitValue($comparison);
         $fieldName = $this->visitField($comparison, $value);
 
-        if ($value !== null) {
+        if (null !== $value) {
             return $this->visitComparisonWithNotNullValue($comparison, $fieldName, $value);
         } else {
             return $this->visitComparisonWithNullValue($comparison, $fieldName);
@@ -191,9 +175,6 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
     }
 
     /**
-     * @param string $type
-     * @param array  $expressions
-     *
      * @return Andx|Orx|Func
      */
     public function visitProcessedCompositeExpression(string $type, array $expressions)
@@ -204,7 +185,7 @@ class DoctrineExpressionVisitor extends AbstractExpressionVisitor
             case CompositeExpression::TYPE_OR:
                 return new Orx($expressions);
             case CompositeExpression::TYPE_NOT:
-                return new Func("not", $expressions);
+                return new Func('not', $expressions);
             default:
                 throw new UnknownCompositeException($type);
         }
