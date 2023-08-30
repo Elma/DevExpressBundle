@@ -71,11 +71,12 @@ class DoctrineQueryHandler
     /**
      * @param string $value
      *
-     * @return string
+     * @return string|null
      */
-    public function transformValueCase(string $value): string
+    public function transformValueCase(string $value): ?string
     {
         if ($this->queryConfig->isCaseSensitive()) {
+            print_r($value . ' value');
             return $value;
         } else {
             return mb_strtolower($value, 'UTF-8');

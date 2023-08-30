@@ -22,11 +22,9 @@ class SearchQueryParserTest extends TestCase
         $this->assertEquals(3, $parser->getBuilder()->getStartIndex());
     }
 
-    /**
-     * @expectedException     \Bilendi\DevExpressBundle\Exception\NotNumericException
-     */
     public function testParseStartIndexException()
     {
+        $this->expectException(\Bilendi\DevExpressBundle\Exception\NotNumericException::class);
         $parser = new SearchQueryParser();
         $this->assertEquals(0, $parser->getBuilder()->getStartIndex());
 
@@ -47,11 +45,9 @@ class SearchQueryParserTest extends TestCase
         $this->assertEquals(3, $parser->getBuilder()->getMaxResults());
     }
 
-    /**
-     * @expectedException     \Bilendi\DevExpressBundle\Exception\NotNumericException
-     */
     public function testParseMaxResultsException()
     {
+        $this->expectException(\Bilendi\DevExpressBundle\Exception\NotNumericException::class);
         $parser = new SearchQueryParser();
         $this->assertEquals(0, $parser->getBuilder()->getMaxResults());
 
@@ -88,11 +84,9 @@ class SearchQueryParserTest extends TestCase
         $this->assertEquals($expected, $parser->getBuilder()->getSortings());
     }
 
-    /**
-     * @expectedException     \Bilendi\DevExpressBundle\Exception\NotArrayException
-     */
     public function testParseSortingExpcetion()
     {
+        $this->expectException(\Bilendi\DevExpressBundle\Exception\NotArrayException::class);
         $parser = new SearchQueryParser();
         $this->assertEquals(0, $parser->getBuilder()->getMaxResults());
 

@@ -21,7 +21,7 @@ class CompositeExpressionTest extends TestCase
         $comp = new CompositeExpression('and', []);
 
         $mock = $this->getMockBuilder(AbstractExpressionVisitor::class)
-            ->setMethods(['visitCompositeExpression'])
+            ->onlyMethods(['visitCompositeExpression'])
             ->getMockForAbstractClass();
 
         $mock->expects($this->once())

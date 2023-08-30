@@ -106,7 +106,7 @@ class DoctrineQueryHandlerTest extends TestCase
     public function testAddSorting()
     {
         $config = $this->getConfigMock();
-        $config->expects($this->at(0))
+        $config->expects($this->at(0)) //???
                 ->method('mapField')
                 ->with('lol')
                 ->willReturn('lol');

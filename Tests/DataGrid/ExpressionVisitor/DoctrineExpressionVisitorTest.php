@@ -147,11 +147,9 @@ class DoctrineExpressionVisitorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException     \Bilendi\DevExpressBundle\Exception\UnknownCompositeException
-     */
     public function testVisitProcessedCompositeExpressionException()
     {
+        $this->expectException(\Bilendi\DevExpressBundle\Exception\UnknownCompositeException::class);
         $this->getVisitor('f1', null)->visitProcessedCompositeExpression('haha', []);
     }
 

@@ -13,7 +13,7 @@ class EmptyExpressionTest extends TestCase
         $comp = new EmptyExpression();
 
         $mock = $this->getMockBuilder(AbstractExpressionVisitor::class)
-            ->setMethods(['visitEmpty'])
+            ->onlyMethods(['visitEmpty'])
             ->getMockForAbstractClass();
 
         $mock->expects($this->once())
